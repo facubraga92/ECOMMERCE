@@ -1,6 +1,6 @@
-import express from "express";
-import morgan from "morgan";
-import db from "./config/db.js";
+const express = require('express')
+const morgan = require('morgan')
+const db = require('./models')
 
 const app = express();
 
