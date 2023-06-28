@@ -1,6 +1,6 @@
-const Sequelize = require('sequelize')
-const db = require('../config/db.js')
-const bcrypt = require('bcrypt')
+const Sequelize = require("sequelize");
+const db = require("../config/db.js");
+const bcrypt = require("bcrypt");
 
 class Users extends Sequelize.Model {
   hash(password, salt) {
@@ -18,7 +18,7 @@ Users.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      autoIncrement:true,
+      autoIncrement: true,
       primaryKey: true,
     },
     name: {
@@ -30,8 +30,8 @@ Users.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     password: {
       type: Sequelize.STRING,
@@ -55,23 +55,28 @@ Users.init(
       type: Sequelize.STRING,
     },
   },
-  { sequelize: db, modelName: "users" }
+  {
+    sequelize: db,
+    modelName: "users",
+    hooks: {
+      beforeCreate: async (user) => {
+        const salt = bcrypt.genSaltSync(8);
+        user.setDataValue("salt", salt);
+
+        let hash = await user.hash(user.password, user.salt);
+        user.setDataValue("password", hash);
+      },
+    },
+  }
 );
 
-Users.beforeCreate(async (user) => {
-  const saltRounds = 8;
 
-  try {
-    if (typeof user.password !== "string") {
-      throw new Error("Invalid password");
-    }
+Users.prototype.hash = function (plainPassword, salt) {
+  return bcrypt.hash(plainPassword, salt);
+};
 
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-});
+Users.prototype.validatePassword = async function (plainPassword) {
+  return await bcrypt.compare(plainPassword, this.password);
+};
 
-module.exports = Users
+module.exports = Users;
