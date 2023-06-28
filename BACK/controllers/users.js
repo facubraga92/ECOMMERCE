@@ -1,5 +1,6 @@
 const { generateToken, validateToken } = require("../config/tokens");
 const Users = require("../models/Users");
+const bcrypt = require('bcrypt')
 
 const createUser = async (req, res) => {
   try {
@@ -48,8 +49,37 @@ const logOut = (req, res) => {
   res.sendStatus(204);
 };
 
+const updateUser = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await Users.findOne({ where: { email } });
+
+  if (!user) {
+    return res.status(404).send("Usuario no encontrado");
+  }
+
+  if (password) {
+    const salt = user.salt;
+    const hash = await bcrypt.hash(password, salt);
+
+    req.body.password = hash;
+  } else {
+    delete req.body.password; // Eliminar la propiedad "password" de req.body si está vacía
+  }
+
+  const updatedUser = await Users.update(req.body, {
+    where: { email },
+    returning: true,
+  });
+
+  console.log(req.body);
+  console.log(updatedUser);
+
+  res.status(202).send(updatedUser);
+};
+
 module.exports = {
   createUser,
   loginUser,
-  logOut
+  logOut,
+  updateUser,
 };

@@ -70,7 +70,6 @@ Users.init(
   }
 );
 
-
 Users.prototype.hash = function (plainPassword, salt) {
   return bcrypt.hash(plainPassword, salt);
 };
