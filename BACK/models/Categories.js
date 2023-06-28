@@ -1,24 +1,25 @@
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
+const db = require("../config/db.js");
 
-class Categories extends Model {}
+class Categories extends Sequelize.Model {}
 
 Categories.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       unique: true,
       primaryKey: true,
     },
-    name: {
-      type: DataTypes.STRING,
+    orderId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    productId: {
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
   },
-  {
-    sequelize,
-    modelName: "categories",
-  }
+  { sequelize: db, modelName: "categories" }
 );
 
 module.exports = Categories;

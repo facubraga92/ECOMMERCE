@@ -1,25 +1,25 @@
 const Sequelize = require("sequelize");
-const db = require("../db");
+const db = require("../config/db.js");
 
 class Products extends Sequelize.Model {}
 
 Products.init(
   {
     id: {
-      type: Sequelize.DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true,
     },
     name: {
-      type: Sequelize.DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false,
     },
     description: {
-      type: Sequelize.DataTypes.TEXT,
+      type: Sequelize.TEXT,
       allowNull: false,
     },
     price: {
-      type: Sequelize.DataTypes.DECIMAL(10, 2),
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
   },

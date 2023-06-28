@@ -1,28 +1,25 @@
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
+const db = require("../config/db.js");
 
-class Oder_details extends Model {}
+class Order_details extends Sequelize.Model {}
 
-Oder_details.init(
+Order_details.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       unique: true,
       primaryKey: true,
     },
     orderId: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
     productId: {
-      type: DataTypes.INTEGER,
+      type: Sequelize.INTEGER,
       allowNull: false,
     },
   },
-  {
-    sequelize,
-    modelName: "oder_details",
-  }
+  { sequelize: db, modelName: "order_details" }
 );
 
-module.exports = Oder_details;
+module.exports = Order_details;
