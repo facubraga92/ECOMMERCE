@@ -6,8 +6,16 @@ const app = express();
 const routes = require("./routes/index");
 
 app.use(morgan("dev"));
+const cors = require("cors");
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/api", routes);
 
