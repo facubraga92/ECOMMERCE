@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -31,13 +31,13 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <Routes>
-        <Route path={"/"} element={<Home />} />
-        <Route path={"/users/:id"} element={<Profile />} />
+        <Route path={"/"} element={<h1>hola</h1>} />
+        {/* <Route path={"/users/:id"} element={<Profile />} />
         <Route path={"/products/all"} element={<Products />} />
         <Route path={"/products/:type"} element={<Product />} />
         <Route path={"/products/search/:name"} element={<Search />} />
         <Route path={"/faq"} element={<Faq />} />
-        <Route path={"/contact"} element={<Contact />} />
+        <Route path={"/contact"} element={<Contact />} /> */}
       </Routes>
     </>
   );
