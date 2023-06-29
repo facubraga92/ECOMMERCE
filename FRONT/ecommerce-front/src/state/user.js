@@ -11,6 +11,6 @@ export const userInitialState = {
   role: null,
 };
 
-export const userReducer = createReducer(userInitialState, {
-  [setUser]: (state, action) => action.payload,
+export const userReducer = createReducer(userInitialState, (builder) => {
+  builder.addCase(setUser, (state, action) => action.payload);
 });
