@@ -34,10 +34,38 @@ const Login = () => {
           credentials: "include",
         }
       )
-      .then((res) => dispatch(setUser(res.data)))
-      .then(() => navigate("/"))
-      .catch((err) => {
-        window.alert(err.response.data);
+      .then((loginResponse) => {
+        // Verificar el token después del inicio de sesión exitoso
+        axios
+          .get("http://localhost:3000/api/users/me", {
+            withCredentials: true,
+            credentials: "include",
+          })
+          .then((tokenVerifyResponse) => {
+            dispatch(setUser(tokenVerifyResponse.data));
+
+            alert(
+              `Inicio de sesión exitoso: Bienvenido de regreso ${loginResponse.data.name} `
+            );
+
+            // Mover la navegación a la página principal aquí
+            navigate("/");
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 403) {
+              // El token no es válido
+              alert("El token no es válido. Inicia sesión nuevamente.");
+            } else {
+              alert(`Error en la verificación del token: ${error.message}`);
+            }
+          });
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          alert(error.response.data);
+        } else {
+          alert("Ocurrió un error al procesar la solicitud.");
+        }
       });
   };
 
