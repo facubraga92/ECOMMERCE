@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../state/user";
 
+//Estilos
+import "../styles/login.css";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,37 +74,44 @@ const Login = () => {
 
   return (
     <>
-      <h2 className="login-title">Iniciar sesión</h2>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <label className="login-label" htmlFor="email">
-          Nombre de usuario:
-          <input
-            className="login-input"
-            id="email"
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </label>
-        <label className="login-label" htmlFor="password">
-          Contraseña:
-          <input
-            className="login-input"
-            id="password"
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </label>
-        <button className="login-button" type="submit">
-          Iniciar sesión
-        </button>
-
-        <p>
-          Aun no tienes cuenta?
-          <Link to={"/register"}> Registrate.</Link>
-        </p>
-      </form>
+      <div class="container">
+        <form onSubmit={handleSubmit}>
+          <h1>Login</h1>
+          <div class="email t-input">
+            <input
+              type="email"
+              required=""
+              id="email"
+              placeholder="."
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <label for="email">Email</label>
+            <div class="b-line"></div>
+          </div>
+          <div class="password t-input">
+            <input
+              type="password"
+              required=""
+              id="password"
+              placeholder="."
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            <label for="password">Contraseña</label>
+            <div class="b-line"></div>
+          </div>
+          <div class="not_account">
+            <label>
+              ¿Aun no tienes cuenta?{" "}
+              <Link to={"/register"} className="register">
+                Registrate.
+              </Link>
+            </label>
+          </div>
+          <button>Log in</button>
+        </form>
+      </div>
     </>
   );
 };
