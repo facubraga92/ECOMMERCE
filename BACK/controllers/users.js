@@ -1,6 +1,6 @@
 const { generateToken, validateToken } = require("../config/tokens");
 const Users = require("../models/Users");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
   try {

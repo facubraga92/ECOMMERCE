@@ -34,10 +34,10 @@ const Login = () => {
           credentials: "include",
         }
       )
-      .then((res) => dispatch(setUser(res.data.payload)))
+      .then((res) => dispatch(setUser(res.data)))
       .then(() => navigate("/"))
       .catch((err) => {
-        window.alert("El usuario es incorrecto o aún no ha sido registrado");
+        window.alert(err.response.data);
       });
   };
 
