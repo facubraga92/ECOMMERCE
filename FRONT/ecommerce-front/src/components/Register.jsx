@@ -3,7 +3,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-/* import videoBackground from "../Video/backvideo.mp4"; */
+//Estilos
+import "../styles/register.css";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -32,56 +33,76 @@ const Register = () => {
   };
 
   return (
-    <div className="register has-transparent-background">
-      {/*       <video className="video-background" autoPlay loop muted>
-        <source src={videoBackground} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video> */}
-      <div className="register-form">
-        <h2>Crear una cuenta</h2>
-        <form onSubmit={handleSubmit}>
+    <div className="container">
+      <form onSubmit={handleSubmit}>
+        <h1>Register</h1>
+        <div className="email t-input">
           <input
-            type="name"
-            placeholder="name"
+            type="email"
+            required=""
+            id="email"
+            placeholder="."
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <label htmlFor="email">Correo</label>
+          <div className="b-line"></div>
+        </div>
+        <div className="password t-input">
+          <input
+            type="password"
+            required=""
+            id="password"
+            placeholder="."
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <label htmlFor="password">Contraseña</label>
+          <div className="b-line"></div>
+        </div>
+        <div className="name t-input">
+          <input
+            type="text"
+            placeholder="."
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
+          <label htmlFor="name">Nombre</label>
+          <div className="b-line"></div>
+        </div>
+        <div className="address t-input">
           <input
-            type="email"
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <input
-            type="address"
-            placeholder="address"
+            type="text"
+            placeholder="."
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             required
           />
+          <label htmlFor="address">Direccion</label>
+          <div className="b-line"></div>
+        </div>
+        <div className="phone t-input">
           <input
-            type="phone"
-            placeholder="phone"
+            type="tel"
+            placeholder="."
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             required
           />
-          <button type="submit">Register</button>
-          <p className="p">
-            Do you already have an account?
-            <Link to={"/login"}> Log In</Link>
-          </p>
-        </form>
-      </div>
+          <label htmlFor="phone">Telefono</label>
+          <div className="b-line"></div>
+        </div>
+        <div className="not_account">
+          <label>
+            ¿Ya tienes una cuenta?{" "}
+            <Link to={"/login"} className="login">
+              Inicia sesión.
+            </Link>
+          </label>
+        </div>
+        <button type="submit">Register</button>
+      </form>
     </div>
   );
 };
