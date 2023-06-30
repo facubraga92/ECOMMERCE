@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userInitialState } from "../state/user.js";
 import { useEffect } from "react";
@@ -43,57 +42,29 @@ export default function Navbar() {
   return (
     <nav class="navbar">
       <div class="navbar-container">
-        <a href="#" class="navbar-brand">
+        <a href="/" class="navbar-brand">
           TRASH TALK$$
         </a>
         <ul class="navbar-links">
-          <li>
-            <a href="/" class="navbar-link">
-              Acerca de
+          {user.name ? (
+            <li>
+              <a href="/login" class="navbar-link">
+                Login
+              </a>
+            </li>
+          ) : (
+            <a href={handleLogout} class="navbar-link">
+              logout
             </a>
-          </li>
+          )}
+
           <li>
-            <a href="/" class="navbar-link">
-              Contacto
+            <a href="/register" class="navbar-link">
+              Register
             </a>
           </li>
         </ul>
       </div>
     </nav>
   );
-}
-
-{
-  /* <nav className="navbar has-transparent-background" role="navigation">
-      <div>
-        {user.email === null ? (
-          <>
-            <Link to="/register" className="button is-dark">
-              REGISTER
-            </Link>
-            <Link to="/login" className="button is-dark">
-              LOGIN
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/products/all" className="button">
-              PRODUCTS
-            </Link>
-            <Link to="/search" className="button">
-              SEARCH
-            </Link>
-            <Link to="/faq" className="button">
-              FAQ
-            </Link>
-            <Link to="/contact" className="button">
-              CONTACT
-            </Link>
-            <button className="button is-danger" onClick={handleLogout}>
-              LOGOUT
-            </button>
-          </>
-        )}
-      </div>
-    </nav> */
 }
