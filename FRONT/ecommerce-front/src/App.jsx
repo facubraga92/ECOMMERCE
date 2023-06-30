@@ -2,15 +2,18 @@ import { Route, Routes } from "react-router";
 import "./App.css";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import Navbar from "./commons/Navbar";
+import Footer from "./commons/Footer";
 import ProductsGrid from "./components/ProductsGrid";
 import { useSelector } from "react-redux";
 
 function App() {
-  const user = useSelector((state)=> state.user)
+  const user = useSelector((state) => state.user);
   return (
     <>
+      <Navbar />
       <Routes>
-        <Route path={"/"} element={(user.name)?(<ProductsGrid/>):(<Login/>)} />
+        <Route path={"/"} element={user.name ? <ProductsGrid /> : <Login />} />
         <Route path={"/register"} element={<Register />} />
         <Route path={"/login"} element={<Login />} />
         {/* <Route path={"/products/all"} element={<ProductsGrid />} /> */}
@@ -20,6 +23,7 @@ function App() {
         <Route path={"/faq"} element={<Faq />} />
         <Route path={"/contact"} element={<Contact />} /> */}
       </Routes>
+      <Footer />
     </>
   );
 }

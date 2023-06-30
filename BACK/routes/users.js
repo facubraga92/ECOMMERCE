@@ -13,7 +13,7 @@ usersRouter.post("/register", createUser);
 //Login: front debe enviar los campos email , password.
 usersRouter.post("/login", loginUser);
 //logout: front no debe enviar nada.
-usersRouter.post("/logout", logOut);
+usersRouter.get("/logout", logOut);
 usersRouter.get("/me", validateUser, (req, res) => {
   res.status(200).send({ status: "OK", ...req.user });
 });
