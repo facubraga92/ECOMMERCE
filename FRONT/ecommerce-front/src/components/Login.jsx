@@ -109,7 +109,7 @@ const Login = () => {
               </Link>
             </label>
           </div>
-          <button>Iniciar sesión</button>
+          <button>Iniciar</button>
         </form>
       </div>
     </>
