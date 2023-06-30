@@ -35,7 +35,7 @@ const Register = () => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        <h1>Register</h1>
+        <h1>Creá tu cuenta</h1>
         <div className="email t-input">
           <input
             type="email"
@@ -45,7 +45,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label htmlFor="email">Correo</label>
+          <label htmlFor="email">Email</label>
           <div className="b-line"></div>
         </div>
         <div className="password t-input">
@@ -101,7 +101,7 @@ const Register = () => {
             </Link>
           </label>
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Continuar</button>
       </form>
     </div>
   );
