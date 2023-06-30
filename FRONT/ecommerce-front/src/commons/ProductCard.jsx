@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import Navbar from "./Navbar";
 
 const ProductCard = ({ product }) => {
   const [currentVariant, setCurrentVariant] = useState(0);
