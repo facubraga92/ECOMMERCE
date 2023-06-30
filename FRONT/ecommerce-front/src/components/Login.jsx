@@ -76,7 +76,7 @@ const Login = () => {
     <>
       <div class="container">
         <form onSubmit={handleSubmit}>
-          <h1>Login</h1>
+          <h1>Inicia sesión</h1>
           <div class="email t-input">
             <input
               type="email"
@@ -109,7 +109,7 @@ const Login = () => {
               </Link>
             </label>
           </div>
-          <button>Log in</button>
+          <button>Iniciar sesión</button>
         </form>
       </div>
     </>
