@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userInitialState } from "../state/user.js";
 import { useEffect } from "react";
+import "../styles/navbar.css";
 
 export default function Navbar() {
   const dispatch = useDispatch();
@@ -35,13 +36,35 @@ export default function Navbar() {
         credentials: "include",
       })
       .then((user) => {
-        console.log("VERGAAAAAAA");
         dispatch(setUser(userInitialState));
       });
   };
 
   return (
-    <nav className="navbar has-transparent-background" role="navigation">
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="#" class="navbar-brand">
+          TRASH TALK$$
+        </a>
+        <ul class="navbar-links">
+          <li>
+            <a href="/" class="navbar-link">
+              Acerca de
+            </a>
+          </li>
+          <li>
+            <a href="/" class="navbar-link">
+              Contacto
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
+}
+
+{
+  /* <nav className="navbar has-transparent-background" role="navigation">
       <div>
         {user.email === null ? (
           <>
@@ -72,6 +95,5 @@ export default function Navbar() {
           </>
         )}
       </div>
-    </nav>
-  );
+    </nav> */
 }
