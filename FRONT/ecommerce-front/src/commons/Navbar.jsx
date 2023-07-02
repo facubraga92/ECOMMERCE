@@ -45,7 +45,7 @@ export default function Navbar() {
         <ul class="navbar-links">
           {user.email ? (
             <>
-              <Link to="https://github.com/pibelanzallamas">
+              <Link to="http://amazon.com">
                 <a className="text-5xl">🛒</a>
               </Link>
               <Link onClick={handleLogout} class="navbar-link">
