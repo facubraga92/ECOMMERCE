@@ -10,16 +10,12 @@ Categories.init(
       unique: true,
       primaryKey: true,
     },
-    orderId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
-    productId: {
-      type: Sequelize.INTEGER,
+    name: {
+      type: Sequelize.STRING,
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "categories" }
+  { sequelize: db, modelName: "categories" , timestamps: false}
 );
 
 module.exports = Categories;

@@ -1,24 +1,21 @@
 const Sequelize = require("sequelize");
 const db = require("../config/db.js");
 
-class Orders extends Sequelize.Model {}
+class Cart extends Sequelize.Model {}
 
-Orders.init(
+Cart.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      unique: true,
+      allowNull: false,
       primaryKey: true,
     },
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    Date: {
-      type: Sequelize.DATE,
-    },
   },
-  { sequelize: db, modelName: "orders" }
+  { sequelize: db, modelName: "cart" , timestamps: false}
 );
 
-module.exports = Orders;
+module.exports = Cart;

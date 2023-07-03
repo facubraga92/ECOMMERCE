@@ -23,7 +23,7 @@ Products.init(
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "products" }
+  { sequelize: db, modelName: "products", timestamps: false }
 );
 
 module.exports = Products;

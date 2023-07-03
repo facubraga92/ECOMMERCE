@@ -27,7 +27,7 @@ Products_variants.init(
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "products_variants" }
+  { sequelize: db, modelName: "products_variants" , timestamps: false }
 );
 
 module.exports = Products_variants;

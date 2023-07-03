@@ -6,6 +6,7 @@ const app = express();
 const cors = require("cors");
 const routes = require("./routes/index");
 const { DB_PORT } = require("./config");
+const fillFakeData = require("./utils/fakeData");
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -18,7 +19,7 @@ app.use(
 );
 
 //Para llenar de datos falsos Products y Products_variants
-// fillFakeData();
+fillFakeData();
 
 app.use("/api", routes);
 

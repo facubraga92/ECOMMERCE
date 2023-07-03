@@ -1,6 +1,6 @@
-const { faker } = require('@faker-js/faker');
-const Products = require('../models/Products');
-const Products_variants = require('../models/Products_variants');
+const { faker } = require("@faker-js/faker");
+const Products = require("../models/Products");
+const Products_variants = require("../models/Products_variants");
 
 // Genera datos falsos para la tabla products
 const generateFakeProducts = () => {
@@ -11,8 +11,6 @@ const generateFakeProducts = () => {
       name: faker.commerce.productName(),
       description: faker.lorem.paragraph(),
       price: faker.commerce.price(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
       categoryId: null,
     };
     products.push(product);
@@ -29,12 +27,9 @@ const generateFakeProductsVariants = () => {
     const productVariant = {
       id: i,
       productId: productIds[Math.floor(Math.random() * productIds.length)], // Asocia cada variante a un producto existente (1-10)
-      size: ['S', 'M', 'L', 'XL'][Math.floor(Math.random() * 4)],
-      color: 'black', // Cambio aquí
+      size: ["S", "M", "L", "XL"][Math.floor(Math.random() * 4)],
+      color: "black", // Cambio aquí
       stock: Math.floor(Math.random() * 101), // Número aleatorio entre 0 y 100
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      orderId: null,
     };
     productsVariants.push(productVariant);
   }
@@ -46,9 +41,9 @@ const fillFakeData = async () => {
   try {
     await Products.bulkCreate(generateFakeProducts());
     await Products_variants.bulkCreate(generateFakeProductsVariants());
-    console.log('Datos falsos creados exitosamente.');
+    console.log("Datos falsos creados exitosamente.");
   } catch (error) {
-    console.log('Error al crear datos falsos:', error);
+    console.log("Error al crear datos falsos:", error);
   }
 };
 

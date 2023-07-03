@@ -1,25 +1,25 @@
 const Sequelize = require("sequelize");
 const db = require("../config/db.js");
 
-class Order_details extends Sequelize.Model {}
+class CartItem extends Sequelize.Model {}
 
-Order_details.init(
+CartItem.init(
   {
     id: {
       type: Sequelize.INTEGER,
       unique: true,
       primaryKey: true,
     },
-    orderId: {
+    cartId: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    productId: {
+    quantity: {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "order_details" }
+  { sequelize: db, modelName: "cartItem", timestamps: false }
 );
 
-module.exports = Order_details;
+module.exports = CartItem;
