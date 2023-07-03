@@ -7,7 +7,7 @@ DB_HOST = 'localhost'
 DB_NAME = 'trashdb'
 DB_USER = 'null'
 DB_PASSWORD = 'null'
-DB_DIALECT = "postgres"
+DB_DIALECT = 'postgres'
 
 # JWT
 SECRET_TOKEN = 'TRASHTALK'

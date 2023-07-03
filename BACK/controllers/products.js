@@ -33,7 +33,31 @@ const getSingleProduct = (req, res, next) => {
     .catch(next);
 };
 
+const getSearchProduct = (req, res) => {
+  const { name } = req.params;
+
+  Products.findOne(name, {
+    where: {
+      name: name,
+    },
+    include: {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    },
+  })
+    .then((data) => {
+      if (!data) {
+        const error = new Error("Product was not found!");
+        error.status = 404;
+        throw error;
+      }
+      res.status(200).send(data);
+    })
+    .catch(next);
+};
+
 module.exports = {
   getAllProducts,
   getSingleProduct,
+  getSearchProduct,
 };
