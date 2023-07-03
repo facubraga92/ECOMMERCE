@@ -5,7 +5,7 @@ const db = require("./models");
 const app = express();
 const cors = require("cors");
 const routes = require("./routes/index");
-const fillFakeData = require("./utils/fakeData");
+const { DB_PORT } = require("./config");
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 db.sync({ force: false }).then(() => {
-  app.listen(3000, () => {
-    console.log("Escuchando en el puerto 3000 ");
+  app.listen(DB_PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${DB_PORT}`);
   });
 });

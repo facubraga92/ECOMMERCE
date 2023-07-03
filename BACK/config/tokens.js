@@ -1,13 +1,14 @@
 const jwt = require("jsonwebtoken");
+const { SECRET_TOKEN } = require(".");
 
 let generateToken = (payload) => {
-  let token = jwt.sign(payload, "TRASHTALK", { expiresIn: "2h" });
+  let token = jwt.sign(payload, SECRET_TOKEN, { expiresIn: "2h" });
   return token;
 };
 
 let validateToken = (token) => {
   try {
-    return jwt.verify(token, "TRASHTALK");
+    return jwt.verify(token, SECRET_TOKEN);
   } catch (error) {
     return null;
   }
