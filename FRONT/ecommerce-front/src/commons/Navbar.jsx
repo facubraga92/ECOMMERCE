@@ -41,11 +41,13 @@ export default function Navbar() {
   return (
     <nav class="navbar">
       <div class="navbar-container">
-        <Link to='/' class="navbar-brand">TRASH TALK$$</Link>
+        <Link to="/" class="navbar-brand">
+          TRASH TALK$$
+        </Link>
         <ul class="navbar-links">
           {user.email ? (
             <>
-              <Link to="http://amazon.com">
+              <Link to="/cart">
                 <a className="text-5xl">🛒</a>
               </Link>
               <Link onClick={handleLogout} class="navbar-link">
