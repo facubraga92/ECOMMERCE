@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router";
 import "./App.css";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import Cart from "./components/Cart";
 import ProductsGrid from "./components/ProductsGrid";
 import { useSelector } from "react-redux";
 import SingleProduct from "./commons/SIngleProduct";
@@ -20,11 +19,14 @@ function App() {
         <Route path={"/login"} element={<Login />} />
         <Route path={"/products/all"} element={<ProductsGrid />} />
         <Route path={"/products/:id"} element={<SingleProduct />} />
+<<<<<<< HEAD
         <Route path={"/cart"} element={<Cart />} />
         <Route
           path={"/cart-history"}
           element={user.email ? <CartHistory /> : <Login />}
         />
+=======
+>>>>>>> 6e1a9a9159fbefff6e0b05af9bef51e1b4b450c2
       </Routes>
     </>
   );

@@ -19,7 +19,11 @@ app.use(
 );
 
 //Para llenar de datos falsos Products y Products_variants
+<<<<<<< HEAD
 fillFakeData();
+=======
+//fillFakeData();
+>>>>>>> 6e1a9a9159fbefff6e0b05af9bef51e1b4b450c2
 
 app.use("/api", routes);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 import { Link } from "react-router-dom";
@@ -6,11 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser, userInitialState } from "../state/user.js";
 import { useEffect } from "react";
 import "../styles/navbar.css";
+import Cart from "../commons/Cart.jsx";
 
 export default function Navbar() {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     axios
@@ -38,6 +39,10 @@ export default function Navbar() {
       });
   };
 
+  const cartVisible = () => {
+    setVisible((prevState) => !prevState);
+  };
+
   return (
     <nav class="navbar">
       <div class="navbar-container">
@@ -47,9 +52,11 @@ export default function Navbar() {
         <ul class="navbar-links">
           {user.email ? (
             <>
-              <Link to="/cart">
-                <a className="text-5xl">🛒</a>
-              </Link>
+              <button className="cart-button-container" onClick={cartVisible}>
+                {visible && <Cart />}
+                🛒
+              </button>
+
               <Link onClick={handleLogout} class="navbar-link">
                 <li>Logout</li>
               </Link>
@@ -68,39 +75,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-}
-
-{
-  /* <nav className="navbar has-transparent-background" role="navigation">
-      <div>
-        {user.email === null ? (
-          <>
-            <Link to="/register" className="button is-dark">
-              REGISTER
-            </Link>
-            <Link to="/login" className="button is-dark">
-              LOGIN
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link to="/products/all" className="button">
-              PRODUCTS
-            </Link>
-            <Link to="/search" className="button">
-              SEARCH
-            </Link>
-            <Link to="/faq" className="button">
-              FAQ
-            </Link>
-            <Link to="/contact" className="button">
-              CONTACT
-            </Link>
-            <button className="button is-danger" onClick={handleLogout}>
-              LOGOUT
-            </button>
-          </>
-        )}
-      </div>
-    </nav> */
 }
