@@ -10,10 +10,10 @@ const cartRouter = express.Router();
 
 cartRouter.post("/add-item", addItem);
 
-cartRouter.delete("/remove-item/:itemId", removeItem);
+cartRouter.post("/remove-item/:itemId", removeItem);
 
 cartRouter.put("/update-quantity/:itemId", updateQuantity);
 
-cartRouter.get("/cart-items", getCartItems);
+cartRouter.post("/cart-items", getCartItems);
 
 module.exports = cartRouter;
