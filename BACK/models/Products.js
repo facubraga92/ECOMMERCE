@@ -22,6 +22,9 @@ Products.init(
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
+    imgURL: {
+      type: Sequelize.ARRAY(Sequelize.STRING),
+    },
   },
   { sequelize: db, modelName: "products", timestamps: false }
 );

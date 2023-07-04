@@ -10,10 +10,6 @@ Products_variants.init(
       allowNull: false,
       primaryKey: true,
     },
-    productId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
     size: {
       type: Sequelize.STRING,
       allowNull: false,
