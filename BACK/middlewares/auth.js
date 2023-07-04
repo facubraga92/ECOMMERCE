@@ -2,7 +2,6 @@ const { validateToken } = require("../config/tokens");
 
 let validateUser = (req, res, next) => {
   let token = req.cookies.token;
-  console.log(token)
   let payload = validateToken(token);
   req.user = payload;
 

@@ -206,4 +206,70 @@ const getCartItems = async (req, res) => {
   }
 };
 
-module.exports = { addItem, removeItem, updateQuantity, getCartItems };
+const getCartHistory = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar todos los carritos con order_status "in_process" o "sended" para el usuario
+    const carts = await Cart.findAll({
+      where: {
+        userId: user.id,
+        order_status: ["in_process", "sended"], // Filtrar por los estados deseados
+      },
+    });
+
+    if (carts.length === 0) {
+      return res.status(404).json({ message: "No se encontraron carritos" });
+    }
+
+    const cartItems = [];
+
+    // Obtener los Cart_item de cada carrito y sus relaciones con Products_variants y Products
+    for (const cart of carts) {
+      const items = await Cart_item.findAll({
+        where: {
+          cartId: cart.id,
+        },
+        include: [
+          {
+            model: Products_variants,
+            include: [
+              {
+                model: Products,
+                attributes: ["id", "name", "description","categoryId"],
+              },
+            ],
+          },
+        ],
+      });
+
+      cartItems.push({
+        cartId: cart.id,
+        order_status: cart.order_status,
+        amount: cart.amount,
+        shipping_address: cart.shipping_address,
+        items: items,
+      });
+    }
+
+    res.json({ carts: cartItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los ítems del carrito" });
+  }
+};
+
+module.exports = {
+  addItem,
+  removeItem,
+  updateQuantity,
+  getCartItems,
+  getCartHistory,
+};

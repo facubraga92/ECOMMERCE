@@ -24,6 +24,7 @@ Products.init(
     },
     imgURL: {
       type: Sequelize.ARRAY(Sequelize.STRING),
+      defaultValue: []
     },
   },
   { sequelize: db, modelName: "products", timestamps: false }

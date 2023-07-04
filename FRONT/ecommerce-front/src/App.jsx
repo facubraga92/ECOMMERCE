@@ -7,6 +7,7 @@ import ProductsGrid from "./components/ProductsGrid";
 import { useSelector } from "react-redux";
 import SingleProduct from "./commons/SIngleProduct";
 import Navbar from "./commons/Navbar";
+import CartHistory from "./components/CartHistory";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -20,6 +21,10 @@ function App() {
         <Route path={"/products/all"} element={<ProductsGrid />} />
         <Route path={"/products/:id"} element={<SingleProduct />} />
         <Route path={"/cart"} element={<Cart />} />
+        <Route
+          path={"/cart-history"}
+          element={user.email ? <CartHistory /> : <Login />}
+        />
       </Routes>
     </>
   );
