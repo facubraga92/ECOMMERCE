@@ -7,7 +7,7 @@ Products.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
     },
     name: {

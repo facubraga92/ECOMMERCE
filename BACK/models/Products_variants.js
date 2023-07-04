@@ -7,7 +7,7 @@ Products_variants.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
     },
     size: {
@@ -23,7 +23,7 @@ Products_variants.init(
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "products_variants" , timestamps: false }
+  { sequelize: db, modelName: "products_variants", timestamps: false }
 );
 
 module.exports = Products_variants;

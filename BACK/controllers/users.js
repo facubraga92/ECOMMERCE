@@ -1,4 +1,4 @@
-const { generateToken, validateToken } = require("../config/tokens");
+const { generateToken } = require("../config/tokens");
 const Users = require("../models/Users");
 const bcrypt = require("bcrypt");
 

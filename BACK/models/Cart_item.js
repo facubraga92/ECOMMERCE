@@ -7,7 +7,7 @@ Cart_item.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      unique: true,
+      autoIncrement: true,
       primaryKey: true,
     },
     quantity: {

@@ -7,7 +7,7 @@ Categories.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      unique: true,
+      autoIncrement: true,
       primaryKey: true,
     },
     name: {
@@ -15,7 +15,7 @@ Categories.init(
       allowNull: false,
     },
   },
-  { sequelize: db, modelName: "categories" , timestamps: false}
+  { sequelize: db, modelName: "categories", timestamps: false }
 );
 
 module.exports = Categories;

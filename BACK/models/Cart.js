@@ -7,7 +7,7 @@ Cart.init(
   {
     id: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
     },
     ammount: {
