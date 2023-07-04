@@ -4,7 +4,7 @@ const Products = require("./Products");
 const Categories = require("./Categories");
 const Products_variants = require("./Products_variants");
 const Cart = require("./Cart");
-const CartItem = require("./CartItem");
+const Cart_item = require("./Cart_item");
 
 // Relación entre Users y Cart
 Users.hasMany(Cart);
@@ -19,11 +19,11 @@ Categories.hasMany(Products);
 Products.belongsTo(Categories);
 
 // Relación entre Orders y Order_details
-Cart.hasMany(CartItem);
-CartItem.belongsTo(Cart);
+Cart.hasMany(Cart_item);
+Cart_item.belongsTo(Cart);
 
-//Relacion entre CartItem y Products_variants
-CartItem.belongsTo(Products_variants);
-Products_variants.hasMany(CartItem);
+//Relacion entre Cart_item y Products_variants
+Cart_item.belongsTo(Products_variants);
+Products_variants.hasMany(Cart_item);
 
 module.exports = db;

@@ -58,6 +58,7 @@ Users.init(
   {
     sequelize: db,
     modelName: "users",
+    timestamps: false,
     hooks: {
       beforeCreate: async (user) => {
         const salt = bcrypt.genSaltSync(8);

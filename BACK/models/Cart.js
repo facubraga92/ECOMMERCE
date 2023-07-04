@@ -10,12 +10,20 @@ Cart.init(
       allowNull: false,
       primaryKey: true,
     },
-    userId: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
+    ammount: {
+      type: Sequelize.DECIMAL(10, 2),
+    },
+    order_date: {
+      type: Sequelize.DATEONLY,
+    },
+    shipping_address: {
+      type: Sequelize.STRING,
+    },
+    order_status: {
+      type: Sequelize.ENUM("pay_pending", "in_process", "sended"),
     },
   },
-  { sequelize: db, modelName: "cart" , timestamps: false}
+  { sequelize: db, modelName: "cart", timestamps: false }
 );
 
 module.exports = Cart;
