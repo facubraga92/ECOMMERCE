@@ -1,12 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { removeToCart } from "../state/cart";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState([]);
+
   const user = useSelector((state) => state.user);
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const Cart = () => {
         );
         console.log(response);
         setCartItems(response.data.cartItems);
+        setCart(response.data.cart);
       } catch (error) {
         console.error("Error al obtener los items del carrito", error);
       }
@@ -50,6 +53,7 @@ const Cart = () => {
       );
       console.log(response);
       setCartItems(response.data.cartItems);
+      setCart(response.data.cart);
     } catch (error) {
       console.error("Error al eliminar el elemento del carrito", error);
     }
@@ -111,7 +115,9 @@ const Cart = () => {
                               <li key={item.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
-                                    src={item.imageSrc}
+                                    src={
+                                      item.products_variant.product.imgURL?.[0]
+                                    }
                                     alt={item.imageAlt}
                                     className="h-full w-full object-cover object-center"
                                   />
@@ -121,14 +127,20 @@ const Cart = () => {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href={item.href}>
-                                          {item.products_variant.product.name}
-                                        </a>
+                                        <Link
+                                          to={`/products/${item.products_variant.product.id}`}
+                                        >
+                                          <a>
+                                            {item.products_variant.product.name}
+                                          </a>
+                                        </Link>
                                       </h3>
-                                      <p className="ml-4">{item.price}</p>
+                                      <p className="ml-4">
+                                        {item.products_variant.product.price}
+                                      </p>
                                     </div>
                                     <p className="mt-1 text-sm text-gray-500">
-                                      {item.color}
+                                      {item.products_variant.color}
                                     </p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
@@ -159,7 +171,7 @@ const Cart = () => {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>$262.00</p>
+                        <p>{cart.amount}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.

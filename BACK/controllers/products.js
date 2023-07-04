@@ -7,7 +7,7 @@ const getAllProducts = (req, res) => {
       model: Products_variants,
       attributes: ["id", "size", "color", "stock"],
     },
-    attributes: ["id", "name", "description", "price","imgURL"],
+    attributes: ["id", "name", "description", "price", "imgURL"],
   })
     .then((data) => res.status(200).send(data))
     .catch((err) => console.log(err));

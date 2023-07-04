@@ -192,14 +192,14 @@ const getCartItems = async (req, res) => {
           include: [
             {
               model: Products,
-              attributes: ["id", "name", "description"],
+              attributes: ["id", "name", "description", "price", "imgURL"],
             },
           ],
         },
       ],
     });
 
-    res.json({ cartItems });
+    res.json({ cartItems, cart });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al obtener los ítems del carrito" });
@@ -243,7 +243,7 @@ const getCartHistory = async (req, res) => {
             include: [
               {
                 model: Products,
-                attributes: ["id", "name", "description","categoryId"],
+                attributes: ["id", "name", "description", "categoryId"],
               },
             ],
           },
