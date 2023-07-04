@@ -18,12 +18,12 @@ Products_variants.belongsTo(Products);
 Categories.hasMany(Products);
 Products.belongsTo(Categories);
 
-// Relación entre Orders y Order_details
+// Relación entre Cart y Cart_item
 Cart.hasMany(Cart_item);
 Cart_item.belongsTo(Cart);
 
 //Relacion entre Cart_item y Products_variants
-Cart_item.belongsTo(Products_variants);
 Products_variants.hasMany(Cart_item);
+Cart_item.belongsTo(Products_variants);
 
 module.exports = db;
