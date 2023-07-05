@@ -45,6 +45,21 @@ const addItem = async (req, res) => {
       });
     }
 
+    // Obtener la variante de producto y verificar el stock
+    const productVariant = await Products_variants.findByPk(productsVariantId);
+
+    if (!productVariant) {
+      return res
+        .status(404)
+        .json({ message: "Variante de producto no encontrada" });
+    }
+
+    if (productVariant.stock < quantity) {
+      return res.status(400).json({
+        message: `No hay suficiente stock disponible,queda/n ${productVariant.stock} unidad/es del producto solicitado.`,
+      });
+    }
+
     // Crear el Cart_item y asociarlo al Cart y al Products_variants
     const cartItem = await Cart_item.create({
       quantity,

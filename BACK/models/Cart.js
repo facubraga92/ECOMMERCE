@@ -12,7 +12,7 @@ Cart.init(
     },
     amount: {
       type: Sequelize.DECIMAL(10, 2),
-      defaultValue: 0
+      defaultValue: 0,
     },
     order_date: {
       type: Sequelize.DATEONLY,
@@ -26,6 +26,5 @@ Cart.init(
   },
   { sequelize: db, modelName: "cart", timestamps: false }
 );
-
 
 module.exports = Cart;
