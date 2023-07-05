@@ -8,23 +8,24 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState([]);
-
   const user = useSelector((state) => state.user);
   const [open, setOpen] = useState(true);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const response = await axios.post(
           "http://localhost:3000/api/cart/cart-items",
-
           {
             email: user.email,
           }
         );
-        console.log(response);
-        setCartItems(response.data.cartItems);
+
+        const updatedCartItems = response.data.cartItems.map((item) => ({
+          ...item,
+        }));
+
+        setCartItems(updatedCartItems);
         setCart(response.data.cart);
       } catch (error) {
         console.error("Error al obtener los items del carrito", error);
@@ -51,11 +52,45 @@ const Cart = () => {
           email: user.email,
         }
       );
-      console.log(response);
       setCartItems(response.data.cartItems);
       setCart(response.data.cart);
     } catch (error) {
       console.error("Error al eliminar el elemento del carrito", error);
+    }
+  };
+
+  const handleUpdateQuantity = async (productVariantId, newQuantity) => {
+    try {
+      const updatedCartItems = cartItems.map((item) => {
+        if (item.products_variant.id === productVariantId) {
+          return {
+            ...item,
+            quantity: newQuantity,
+          };
+        }
+        return item;
+      });
+
+      const response = await axios.post(
+        `http://localhost:3000/api/cart/update-quantity/${productVariantId}`,
+        {
+          email: user.email,
+          quantity: newQuantity,
+        }
+      );
+
+      setCartItems(updatedCartItems);
+
+      let totalAmount = 0;
+      updatedCartItems.forEach((item) => {
+        totalAmount += item.products_variant.product.price * item.quantity;
+      });
+      setCart((prevCart) => ({ ...prevCart, amount: totalAmount }));
+    } catch (error) {
+      console.error(
+        "Error al actualizar la cantidad del producto en el carrito",
+        error
+      );
     }
   };
 
@@ -136,7 +171,8 @@ const Cart = () => {
                                         </Link>
                                       </h3>
                                       <p className="ml-4">
-                                        {item.products_variant.product.price}
+                                        {item.products_variant.product.price *
+                                          item.quantity}
                                       </p>
                                     </div>
                                     <p className="mt-1 text-sm text-gray-500">
@@ -145,7 +181,7 @@ const Cart = () => {
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <p className="text-gray-500">
-                                      Qty {item.quantity}
+                                      Stock total {item.products_variant.stock}
                                     </p>
 
                                     <div className="flex">
@@ -158,6 +194,29 @@ const Cart = () => {
                                       >
                                         Remove
                                       </button>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-1 items-end justify-between text-sm">
+                                    <div className="flex">
+                                      <select
+                                        className="text-white-600"
+                                        value={item.quantity}
+                                        onChange={(e) =>
+                                          handleUpdateQuantity(
+                                            item.products_variant.id,
+                                            parseInt(e.target.value)
+                                          )
+                                        }
+                                      >
+                                        {[...Array(10)].map((_, index) => (
+                                          <option
+                                            key={index + 1}
+                                            value={index + 1}
+                                          >
+                                            {index + 1}
+                                          </option>
+                                        ))}
+                                      </select>
                                     </div>
                                   </div>
                                 </div>
@@ -208,5 +267,4 @@ const Cart = () => {
     </Transition.Root>
   );
 };
-
 export default Cart;
