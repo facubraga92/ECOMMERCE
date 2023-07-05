@@ -30,7 +30,7 @@ export default function Navbar() {
   }, []);
   const handleLogout = () => {
     axios
-      .get("http://localhost:3000/api/users/logout", {
+      .post("http://localhost:3000/api/users/logout", {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
         credentials: "include",
