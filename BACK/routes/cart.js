@@ -6,6 +6,7 @@ const {
   updateQuantity,
   getCartItems,
   getCartHistory,
+  updateCartOrderStatusAndStock,
 } = require("../controllers/cart");
 const cartRouter = express.Router();
 
@@ -18,5 +19,7 @@ cartRouter.post("/update-quantity/:itemId", updateQuantity);
 cartRouter.post("/cart-items", getCartItems);
 
 cartRouter.post("/cart-history", getCartHistory);
+
+cartRouter.post("/order-status", updateCartOrderStatusAndStock);
 
 module.exports = cartRouter;

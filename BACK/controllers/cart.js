@@ -266,10 +266,65 @@ const getCartHistory = async (req, res) => {
   }
 };
 
+const updateCartOrderStatusAndStock = async (req, res) => {
+  try {
+    const { order_status } = req.body;
+
+    // Buscar el carrito con order_status "pay_pending"
+    const cart = await Cart.findOne({
+      where: {
+        order_status: "pay_pending",
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        message: "Carrito no encontrado.",
+      });
+    }
+
+    // Actualizar el order_status del carrito
+    cart.order_status = order_status;
+    await cart.save();
+
+    // Obtener los cart_items asociados al carrito
+    const cartItems = await Cart_item.findAll({ where: { cartId: cart.id } });
+
+    // Actualizar el stock de los products_variants correspondientes
+    for (const cartItem of cartItems) {
+      const { productsVariantId, quantity } = cartItem;
+
+      const productVariant = await Products_variants.findByPk(
+        productsVariantId
+      );
+
+      if (!productVariant) {
+        throw new Error("Variante de producto no encontrada");
+      }
+
+      // Actualizar el stock restando la cantidad del cartItem
+      productVariant.stock -= quantity;
+
+      // Guardar los cambios en el stock del product_variant
+      await productVariant.save();
+    }
+
+    res.json({
+      message: `Se ha actualizado el order_status del carrito y el stock de los articulos correctamente.`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al actualizar el order_status y el stock del carrito",
+    });
+  }
+};
+
 module.exports = {
   addItem,
   removeItem,
   updateQuantity,
   getCartItems,
   getCartHistory,
+  updateCartOrderStatusAndStock,
 };
