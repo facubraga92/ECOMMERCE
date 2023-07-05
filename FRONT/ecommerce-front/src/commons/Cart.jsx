@@ -23,7 +23,6 @@ const Cart = () => {
             email: user.email,
           }
         );
-        console.log(response);
         setCartItems(response.data.cartItems);
         setCart(response.data.cart);
       } catch (error) {

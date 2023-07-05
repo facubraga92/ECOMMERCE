@@ -31,28 +31,41 @@ const SingleProduct = () => {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    if (product !== null && product.products_variants.length > 0) {
+      setSelectedSize(product.products_variants[0]);
+    }
+  }, [product]);
+
+  console.log("selectedSize", selectedSize);
+  console.log("product", product);
+
   const handleAdd = async () => {
-    try {
-      if (selectedSize) {
-        const cartItem = {
-          email: user.email,
-          quantity: 1,
-          productsVariantId: selectedSize.id,
-        };
+    if (user.email) {
+      try {
+        if (selectedSize) {
+          const cartItem = {
+            email: user.email,
+            quantity: 1,
+            productsVariantId: selectedSize.id,
+          };
 
-        const response = await axios.post(
-          "http://localhost:3000/api/cart/add-item",
-          cartItem
-        );
+          const response = await axios.post(
+            "http://localhost:3000/api/cart/add-item",
+            cartItem
+          );
 
-        console.log("Nuevo cart_item agregado:", response.data);
+          console.log("Nuevo cart_item agregado:", response.data);
 
-        dispatch(addToCart(response.data));
-      } else {
-        alert("Please select a size.");
+          dispatch(addToCart(response.data));
+        } else {
+          alert("Please select a size.");
+        }
+      } catch (error) {
+        alert(JSON.stringify(error.response.data.message));
       }
-    } catch (error) {
-      alert(JSON.stringify(error.response.data.message));
+    } else {
+      alert("Inicia sesión para añadir items al carrito.");
     }
   };
 
@@ -64,7 +77,7 @@ const SingleProduct = () => {
     <>
       {product ? (
         <div className="flex p-6 font-mono bg-white">
-          <div className="flex-none w-48 mb-10 relative z-10 before:bg-black before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
+          <div className="flex-none w-48 mb-10 relative z-10  before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
             <img
               src={TTLogo}
               alt=""
@@ -93,6 +106,7 @@ const SingleProduct = () => {
                       name="size"
                       type="radio"
                       value={item.size}
+                      checked={selectedSize === item}
                       onChange={() => handleSizeSelection(item)}
                     />
                     <div
