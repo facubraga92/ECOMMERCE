@@ -8,13 +8,22 @@ import { addToCart } from "../state/cart";
 //styles
 import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
+import Cart from "./Cart";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  // implementando
+  const [visible, setVisible] = useState(false);
+
   const user = useSelector((state) => state.user);
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  //implementando
+  const cartVisible = () => {
+    setVisible((prevState) => !prevState);
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -37,9 +46,6 @@ const SingleProduct = () => {
     }
   }, [product]);
 
-  console.log("selectedSize", selectedSize);
-  console.log("product", product);
-
   const handleAdd = async () => {
     if (user.email) {
       try {
@@ -58,6 +64,7 @@ const SingleProduct = () => {
           console.log("Nuevo cart_item agregado:", response.data);
 
           dispatch(addToCart(response.data));
+          cartVisible();
         } else {
           alert("Please select a size.");
         }
@@ -139,6 +146,7 @@ const SingleProduct = () => {
                   type="button"
                   onClick={handleAdd}
                 >
+                  {visible && <Cart />}
                   Add to bag
                 </button>
               </div>
