@@ -93,7 +93,7 @@ const Cart = () => {
       );
     }
   };
-
+  console.log(open);
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -128,7 +128,7 @@ const Cart = () => {
                         <Dialog.Title className="text-lg font-medium text-gray-900">
                           Shopping cart
                         </Dialog.Title>
-                        <div className="ml-3 flex h-7 items-center">
+                        {/* <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
@@ -137,7 +137,7 @@ const Cart = () => {
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                           </button>
-                        </div>
+                        </div> */}
                       </div>
 
                       <div className="mt-8">
@@ -181,7 +181,9 @@ const Cart = () => {
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <p className="text-gray-500">
-                                      Stock total {item.products_variant.stock}
+                                      Stock total{" "}
+                                      {item.products_variant.stock -
+                                        item.quantity}
                                     </p>
 
                                     <div className="flex">
@@ -244,7 +246,7 @@ const Cart = () => {
                         </a>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                        <p>
+                        {/* <p>
                           or
                           <button
                             type="button"
@@ -254,7 +256,7 @@ const Cart = () => {
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>
                           </button>
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   </div>

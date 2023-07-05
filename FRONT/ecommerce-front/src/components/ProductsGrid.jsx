@@ -19,7 +19,6 @@ const ProductsGrid = () => {
         }
 
         const response = await axios.get(url);
-        console.log(response);
         setProducts(response.data);
       } catch (error) {
         console.log("Error al obtener los productos:", error);

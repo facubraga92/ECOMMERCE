@@ -77,9 +77,63 @@ const updateUser = async (req, res) => {
   res.status(202).send(updatedUser);
 };
 
+const changeUserRole = async (req, res) => {
+  const id = req.params.id;
+  let user = await Users.findByPk(id);
+  if (!user) {
+    res.status(404).send("Usuario no encontrado");
+  }
+  try {
+    user.role == "admin" ? (user.role = "customer") : (user.role = "admin");
+
+    user.save();
+    console.log(user.role);
+    res.send(
+      `Role del usuario con id:${id} cambiado exitosamente a ${user.role}`
+    );
+  } catch (error) {
+    res
+      .status(500)
+      .send(
+        "Ha ocurrido un error al intentar cambiar el role del usuario especificado."
+      );
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await Users.findAll({
+      attributes: ["id", "name", "address", "phone", "role"],
+    });
+
+    res.send(users);
+  } catch (error) {
+    res.status(500).send("No se encontraron usuarios, error del servidor.");
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  let user = await Users.findByPk(id);
+  if (!user) {
+    return res.status(404).send("Usuario no encontrado");
+  }
+  try {
+    await user.destroy();
+    res.status(202).send(`Usuario con id: ${user.id} eliminado exitosamente.`);
+  } catch (error) {
+    res
+      .status(500)
+      .send("Ha ocurrido un error al intentar eliminar el usuario.");
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
   logOut,
   updateUser,
+  changeUserRole,
+  getAllUsers,
+  deleteUser,
 };

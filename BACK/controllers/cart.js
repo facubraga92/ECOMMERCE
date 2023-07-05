@@ -122,6 +122,56 @@ const removeItem = async (req, res) => {
   }
 };
 
+// const updateQuantity = async (req, res) => {
+//   try {
+//     const { email, quantity } = req.body;
+//     const itemId = req.params.itemId;
+
+//     // Buscar el usuario por su email
+//     const user = await Users.findOne({ where: { email } });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "Usuario no encontrado" });
+//     }
+
+//     // Buscar el carrito con order_status "pay_pending" para el usuario
+//     const cart = await Cart.findOne({
+//       where: {
+//         userId: user.id,
+//         order_status: "pay_pending",
+//       },
+//     });
+
+//     if (!cart) {
+//       return res.status(404).json({ message: "Carrito no encontrado" });
+//     }
+
+//     // Buscar el Cart_item en el carrito por su itemId
+//     const cartItem = await Cart_item.findOne({
+//       where: {
+//         productsVariantId: itemId,
+//         cartId: cart.id,
+//       },
+//     });
+
+//     if (!cartItem) {
+//       return res
+//         .status(404)
+//         .json({ message: "Ítem del carrito no encontrado" });
+//     }
+
+//     // Actualizar la cantidad del Cart_item
+//     cartItem.quantity = quantity;
+//     await cartItem.save();
+
+//     res.json({ message: "Cantidad del ítem actualizada exitosamente" });
+//   } catch (error) {
+//     console.error(error);
+//     res
+//       .status(500)
+//       .json({ message: "Error al actualizar la cantidad del ítem" });
+//   }
+// };
 const updateQuantity = async (req, res) => {
   try {
     const { email, quantity } = req.body;
@@ -160,6 +210,23 @@ const updateQuantity = async (req, res) => {
         .json({ message: "Ítem del carrito no encontrado" });
     }
 
+    // Obtener la variante de producto y verificar el stock
+    const productVariant = await Products_variants.findByPk(
+      cartItem.productsVariantId
+    );
+
+    if (!productVariant) {
+      return res
+        .status(404)
+        .json({ message: "Variante de producto no encontrada" });
+    }
+
+    if (quantity > productVariant.stock) {
+      return res.status(400).json({
+        message: `No hay suficiente stock disponible, quedan ${productVariant.stock} unidades del producto solicitado.`,
+      });
+    }
+
     // Actualizar la cantidad del Cart_item
     cartItem.quantity = quantity;
     await cartItem.save();
@@ -172,6 +239,7 @@ const updateQuantity = async (req, res) => {
       .json({ message: "Error al actualizar la cantidad del ítem" });
   }
 };
+
 
 const getCartItems = async (req, res) => {
   try {
