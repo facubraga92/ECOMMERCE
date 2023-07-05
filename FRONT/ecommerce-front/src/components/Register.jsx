@@ -25,7 +25,10 @@ const Register = () => {
         phone: phone,
       })
       .then((res) => res.data)
-      .then(() => navigate("/login"))
+      .then(() => {
+        alert("Registro de usuario exitoso!");
+        navigate("/login");
+      })
 
       .catch((error) => {
         console.log("Error registering", error);
