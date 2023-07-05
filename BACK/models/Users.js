@@ -50,7 +50,6 @@ Users.init(
       allowNull: false,
       defaultValue: "customer",
     },
-
     salt: {
       type: Sequelize.STRING,
     },
