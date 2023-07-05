@@ -70,8 +70,13 @@ const getCategorie =  async (req, res) => {
 
     const products = await Products.findAll({
       where: { categoryId: categoryInstance.id },
-      include: { model: Categories, attributes: ["name"] },
+      include:[ { model: Categories, attributes: ["name"] 
+    }, {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    }],
 
+    
     });
 
     res.json(products);

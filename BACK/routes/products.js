@@ -13,6 +13,6 @@ productsRouter.get("/:id", getSingleProduct);
 
 productsRouter.get("/:name", getSearchProduct);
 
-productsRouter.get('/categorie/:category',getCategorie);
+productsRouter.get('/categories/:category',getCategorie);
 
 module.exports = productsRouter;
