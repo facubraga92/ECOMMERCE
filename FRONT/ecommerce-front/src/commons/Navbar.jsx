@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser, userInitialState } from "../state/user.js";
 import { useEffect } from "react";
@@ -9,6 +9,7 @@ import "../styles/navbar.css";
 import Cart from "../commons/Cart.jsx";
 
 export default function Navbar() {
+  const location = useLocation().pathname;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [visible, setVisible] = useState(false);
@@ -42,7 +43,6 @@ export default function Navbar() {
   const cartVisible = () => {
     setVisible((prevState) => !prevState);
   };
-
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -52,13 +52,27 @@ export default function Navbar() {
         <ul className="navbar-links">
           {user.email ? (
             <>
-              <button className="cart-button-container" onClick={cartVisible}>
+              <Link to="/cart-history">
+                {location == "/cart-history" ? null : (
+                  <button
+                    title="Mi Historial de Compras"
+                    className="cart-button-container mr-2"
+                  >
+                    🕔
+                  </button>
+                )}
+              </Link>
+              <button
+                className="cart-button-container"
+                title="Ir al Carrito"
+                onClick={cartVisible}
+              >
                 {visible && <Cart />}
                 🛒
               </button>
 
               <Link onClick={handleLogout} className="navbar-link">
-                <li>Logout</li>
+                <li title="Cerrar Sesión">Logout</li>
               </Link>
             </>
           ) : (

@@ -74,10 +74,10 @@ const Login = () => {
 
   return (
     <>
-      <div class="container">
+      <div className="container">
         <form onSubmit={handleSubmit}>
           <h1>Inicia sesión</h1>
-          <div class="email t-input">
+          <div className="email t-input">
             <input
               type="email"
               required=""
@@ -86,10 +86,10 @@ const Login = () => {
               value={email}
               onChange={handleEmailChange}
             />
-            <label for="email">Email</label>
-            <div class="b-line"></div>
+            <label htmlFor="email">Email</label>
+            <div className="b-line"></div>
           </div>
-          <div class="password t-input">
+          <div className="password t-input">
             <input
               type="password"
               required=""
@@ -98,10 +98,10 @@ const Login = () => {
               value={password}
               onChange={handlePasswordChange}
             />
-            <label for="password">Contraseña</label>
-            <div class="b-line"></div>
+            <label htmlFor="password">Contraseña</label>
+            <div className="b-line"></div>
           </div>
-          <div class="not_account">
+          <div className="not_account">
             <label>
               ¿Aun no tienes cuenta?{" "}
               <Link to={"/register"} className="register">
@@ -109,7 +109,7 @@ const Login = () => {
               </Link>
             </label>
           </div>
-          <button>Iniciar</button>
+          <button>Entrar</button>
         </form>
       </div>
     </>
