@@ -44,12 +44,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav class="navbar">
-      <div class="navbar-container">
-        <Link to="/" class="navbar-brand">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-brand">
           TRASH TALK$$
         </Link>
-        <ul class="navbar-links">
+        <ul className="navbar-links">
           {user.email ? (
             <>
               <button className="cart-button-container" onClick={cartVisible}>
@@ -63,10 +63,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" class="navbar-link">
+              <Link to="/login" className="navbar-link">
                 <li>Login</li>
               </Link>
-              <Link to="/register" class="navbar-link">
+              <Link to="/register" className="navbar-link">
                 <li>Register</li>
               </Link>
             </>

@@ -8,6 +8,7 @@ import SingleProduct from "./commons/SIngleProduct";
 import Navbar from "./commons/Navbar";
 import CartHistory from "./components/CartHistory";
 import Cart from "./commons/Cart";
+import Categories from "./components/Categories";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -21,6 +22,10 @@ function App() {
         <Route path={"/products/all"} element={<ProductsGrid />} />
         <Route path={"/products/:id"} element={<SingleProduct />} />
         <Route path={"/cart"} element={<Cart />} />
+        <Route path={"/categories/"} element={<Categories />} />
+        <Route path={"/categories/1"} element={<Categories />} />
+        <Route path={"/categories/2"} element={<Categories />} />
+        <Route path={"/categories/3"} element={<Categories />} />
         <Route
           path={"/cart-history"}
           element={user.email ? <CartHistory /> : <Login />}
