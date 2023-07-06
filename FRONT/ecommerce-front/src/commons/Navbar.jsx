@@ -12,7 +12,7 @@ export default function Navbar() {
   const location = useLocation().pathname;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const visible=useSelector((state)=>state.cart.cartVisible)
+  const visible = useSelector((state) => state.cart.cartVisible);
 
   useEffect(() => {
     axios
@@ -52,6 +52,18 @@ export default function Navbar() {
         <ul className="navbar-links">
           {user.email ? (
             <>
+              {user.role == "admin" ? (
+                <Link to="/admin">
+                  {location == "/admin" ? null : (
+                    <button
+                      title="Panel de Admin"
+                      className="cart-button-container mr-2"
+                    >
+                      👮‍♂️
+                    </button>
+                  )}
+                </Link>
+              ) : null}
               <Link to="/cart-history">
                 {location == "/cart-history" ? null : (
                   <button
