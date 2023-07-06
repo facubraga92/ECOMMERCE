@@ -13,6 +13,7 @@ import Gorras from "./components/Gorras";
 import Remeras from "./components/Remeras";
 import Buzos from "./components/Buzos";
 import Checkout from "./components/Checkout";
+import AdminView from "./components/AdminView";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -34,6 +35,10 @@ function App() {
         <Route
           path={"/cart-history"}
           element={user.email ? <CartHistory /> : <Login />}
+        />
+        <Route
+          path={"/admin"}
+          element={user.role == "admin" ? <AdminView /> : <ProductsGrid />}
         />
       </Routes>
     </div>
