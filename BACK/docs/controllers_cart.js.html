@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/cart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/cart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Users = require("../models/Users");
+const Cart = require("../models/Cart");
+const Cart_item = require("../models/Cart_item");
+const Products_variants = require("../models/Products_variants");
+const Products = require("../models/Products");
+
+/**
+ * Agrega un artículo al carrito.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se agregó el artículo al carrito correctamente.
+ */
+
+const addItem = async (req, res) => {
+  try {
+    const { email, productsVariantId, quantity } = req.body;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar un carrito con order_status "pay_pending" para el usuario
+    let cart = await Cart.findOne({
+      where: {
+        userId: user.id,
+        order_status: "pay_pending",
+      },
+    });
+
+    // Si no existe un carrito con order_status "pay_pending", crear uno nuevo
+    if (!cart) {
+      cart = await Cart.create({
+        userId: user.id,
+        order_status: "pay_pending",
+      });
+    }
+
+    // Verificar si el productsVariantId ya se encuentra en el carrito
+    const existingCartItem = await Cart_item.findOne({
+      where: {
+        cartId: cart.id,
+        productsVariantId,
+      },
+    });
+
+    if (existingCartItem) {
+      return res.status(400).json({
+        message: "El producto ya se encuentra agregado en el carrito",
+      });
+    }
+
+    // Obtener la variante de producto y verificar el stock
+    const productVariant = await Products_variants.findByPk(productsVariantId);
+
+    if (!productVariant) {
+      return res
+        .status(404)
+        .json({ message: "Variante de producto no encontrada" });
+    }
+
+    if (productVariant.stock &lt; quantity) {
+      return res.status(400).json({
+        message: `No hay suficiente stock disponible,queda/n ${productVariant.stock} unidad/es del producto solicitado.`,
+      });
+    }
+
+    // Crear el Cart_item y asociarlo al Cart y al Products_variants
+    const cartItem = await Cart_item.create({
+      quantity,
+      cartId: cart.id,
+      productsVariantId,
+    });
+
+    res.json({ message: "Item agregado al carrito exitosamente", cartItem });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al agregar el item al carrito" });
+  }
+};
+
+/**
+ * Elimina un artículo del carrito.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se eliminó el artículo del carrito correctamente.
+ */
+
+const removeItem = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const itemId = req.params.itemId;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar el carrito con order_status "pay_pending" para el usuario
+    const cart = await Cart.findOne({
+      where: {
+        userId: user.id,
+        order_status: "pay_pending",
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
+    }
+
+    // Buscar el Cart_item en el carrito por su itemId
+    const cartItem = await Cart_item.findOne({
+      where: {
+        productsVariantId: itemId,
+        cartId: cart.id,
+      },
+    });
+
+    if (!cartItem) {
+      return res
+        .status(404)
+        .json({ message: "Ítem del carrito no encontrado" });
+    }
+
+    // Eliminar el Cart_item
+    await cartItem.destroy();
+
+    res.json({ message: "Ítem eliminado del carrito exitosamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al eliminar el ítem del carrito" });
+  }
+};
+
+/**
+ * Actualiza la cantidad de un artículo en el carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se actualizó la cantidad del artículo correctamente.
+ * @throws {Error} - Error al actualizar la cantidad del artículo.
+ */
+
+const updateQuantity = async (req, res) => {
+  try {
+    const { email, quantity } = req.body;
+    const itemId = req.params.itemId;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar el carrito con order_status "pay_pending" para el usuario
+    const cart = await Cart.findOne({
+      where: {
+        userId: user.id,
+        order_status: "pay_pending",
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
+    }
+
+    // Buscar el Cart_item en el carrito por su itemId
+    const cartItem = await Cart_item.findOne({
+      where: {
+        productsVariantId: itemId,
+        cartId: cart.id,
+      },
+    });
+
+    if (!cartItem) {
+      return res
+        .status(404)
+        .json({ message: "Ítem del carrito no encontrado" });
+    }
+
+    // Obtener la variante de producto y verificar el stock
+    const productVariant = await Products_variants.findByPk(
+      cartItem.productsVariantId
+    );
+
+    if (!productVariant) {
+      return res
+        .status(404)
+        .json({ message: "Variante de producto no encontrada" });
+    }
+
+    if (quantity > productVariant.stock) {
+      return res.status(400).json({
+        message: `No hay suficiente stock disponible, quedan ${productVariant.stock} unidades del producto solicitado.`,
+      });
+    }
+
+    // Actualizar la cantidad del Cart_item
+    cartItem.quantity = quantity;
+    await cartItem.save();
+
+    res.json({ message: "Cantidad del ítem actualizada exitosamente" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error al actualizar la cantidad del ítem" });
+  }
+};
+
+/**
+ * Obtiene todos los artículos del carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON con los artículos del carrito y el carrito actual.
+ * @throws {Error} - Error al obtener los artículos del carrito.
+ */
+
+const getCartItems = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar el carrito con order_status "pay_pending" para el usuario
+    const cart = await Cart.findOne({
+      where: {
+        userId: user.id,
+        order_status: "pay_pending",
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Carrito no encontrado" });
+    }
+
+    // Obtener todos los Cart_item del carrito y sus relaciones con Products_variants y Products
+    const cartItems = await Cart_item.findAll({
+      where: {
+        cartId: cart.id,
+      },
+      include: [
+        {
+          model: Products_variants,
+          include: [
+            {
+              model: Products,
+              attributes: ["id", "name", "description", "price", "imgURL"],
+            },
+          ],
+        },
+      ],
+    });
+
+    res.json({ cartItems, cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los ítems del carrito" });
+  }
+};
+
+
+/**
+ * Obtiene el historial de carritos de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON con el historial de carritos del usuario.
+ * @throws {Error} - Error al obtener el historial de carritos.
+ */
+
+const getCartHistory = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Buscar el usuario por su email
+    const user = await Users.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Buscar todos los carritos con order_status "in_process" o "sended" para el usuario
+    const carts = await Cart.findAll({
+      where: {
+        userId: user.id,
+        order_status: ["in_process", "sended"], // Filtrar por los estados deseados
+      },
+    });
+
+    if (carts.length === 0) {
+      return res.status(404).json({ message: "No se encontraron carritos" });
+    }
+
+    const cartItems = [];
+
+    // Obtener los Cart_item de cada carrito y sus relaciones con Products_variants y Products
+    for (const cart of carts) {
+      const items = await Cart_item.findAll({
+        where: {
+          cartId: cart.id,
+        },
+        include: [
+          {
+            model: Products_variants,
+            include: [
+              {
+                model: Products,
+                attributes: ["id", "name", "description", "categoryId"],
+              },
+            ],
+          },
+        ],
+      });
+
+      cartItems.push({
+        cartId: cart.id,
+        order_status: cart.order_status,
+        amount: cart.amount,
+        shipping_address: cart.shipping_address,
+        items: items,
+      });
+    }
+
+    res.json({ carts: cartItems });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener los ítems del carrito" });
+  }
+};
+
+
+/**
+ * Actualiza el estado del pedido y el stock de los artículos de un carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se actualizaron correctamente el estado del pedido y el stock de los artículos.
+ * @throws {Error} - Error al actualizar el estado del pedido y el stock de los artículos.
+ */
+
+
+const updateCartOrderStatusAndStock = async (req, res) => {
+  try {
+    const { order_status } = req.body;
+
+    // Buscar el carrito con order_status "pay_pending"
+    const cart = await Cart.findOne({
+      where: {
+        order_status: "pay_pending",
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        message: "Carrito no encontrado.",
+      });
+    }
+
+    // Actualizar el order_status del carrito
+    cart.order_status = order_status;
+    await cart.save();
+
+    // Obtener los cart_items asociados al carrito
+    const cartItems = await Cart_item.findAll({ where: { cartId: cart.id } });
+
+    // Actualizar el stock de los products_variants correspondientes
+    for (const cartItem of cartItems) {
+      const { productsVariantId, quantity } = cartItem;
+
+      const productVariant = await Products_variants.findByPk(
+        productsVariantId
+      );
+
+      if (!productVariant) {
+        throw new Error("Variante de producto no encontrada");
+      }
+
+      // Actualizar el stock restando la cantidad del cartItem
+      productVariant.stock -= quantity;
+
+      // Guardar los cambios en el stock del product_variant
+      await productVariant.save();
+    }
+
+    res.json({
+      message: `Se ha actualizado el order_status del carrito y el stock de los articulos correctamente.`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al actualizar el order_status y el stock del carrito",
+    });
+  }
+};
+
+module.exports = {
+  addItem,
+  removeItem,
+  updateQuantity,
+  getCartItems,
+  getCartHistory,
+  updateCartOrderStatusAndStock,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#changeUserRole">changeUserRole</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#getAllProducts">getAllProducts</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getCartHistory">getCartHistory</a></li><li><a href="global.html#getCartItems">getCartItems</a></li><li><a href="global.html#getCategorie">getCategorie</a></li><li><a href="global.html#getSearchProduct">getSearchProduct</a></li><li><a href="global.html#getSingleProduct">getSingleProduct</a></li><li><a href="global.html#isAdmin">isAdmin</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#updateCartOrderStatusAndStock">updateCartOrderStatusAndStock</a></li><li><a href="global.html#updateQuantity">updateQuantity</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#validateUser">validateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jul 06 2023 00:20:42 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

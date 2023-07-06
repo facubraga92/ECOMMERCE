@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/users.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/users.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { generateToken } = require("../config/tokens");
+const Users = require("../models/Users");
+const bcrypt = require("bcrypt");
+
+
+/**
+ * Crea un nuevo usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito del registro.
+ * @throws {Error} - Error en el registro del usuario.
+ */
+
+const createUser = async (req, res) => {
+  try {
+    let user = await Users.findOne({ where: { email: req.body.email } });
+    if (user) {
+      res.status(401).send("Ya existe un usuario registrado con ese email.");
+    } else {
+      const createdUser = await Users.create(req.body);
+
+      res.send(`Usuario creado con éxito:${createdUser.email}`).status(201);
+    }
+  } catch (error) {
+    res.status(400).send("Hubo un error en el registro");
+  }
+};
+
+/**
+ * Inicia sesión de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene los datos del usuario y un token de autenticación.
+ */
+
+const loginUser = async (req, res) => {
+  let user = await Users.findOne({
+    where: {
+      email: req.body.email,
+    },
+  });
+
+  if (!user) {
+    res.status(401).send("Usuario incorrecto/inexistente.");
+  } else {
+    if (await user.validatePassword(req.body.password)) {
+      const payload = {
+        name: user.name,
+        email: user.email,
+        adress: user.adress,
+        phone: user.phone,
+        role: user.role,
+      };
+      let token = generateToken(payload);
+      res.cookie("token", token);
+      res.send(payload);
+    } else {
+      res.status(404).send("Contraseña Incorrecta");
+    }
+  }
+};
+
+/**
+ * Cierra la sesión de un usuario.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ */
+
+const logOut = (req, res) => {
+  res.clearCookie("token");
+  res.sendStatus(204);
+};
+
+
+/**
+ * Actualiza la información de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene los datos actualizados del usuario.
+ */
+
+const updateUser = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await Users.findOne({ where: { email } });
+
+  if (!user) {
+    return res.status(404).send("Usuario no encontrado");
+  }
+
+  if (password) {
+    const salt = user.salt;
+    const hash = await bcrypt.hash(password, salt);
+
+    req.body.password = hash;
+  } else {
+    delete req.body.password; // Eliminar la propiedad "password" de req.body si está vacía
+  }
+
+  const updatedUser = await Users.update(req.body, {
+    where: { email },
+    returning: true,
+  });
+
+  console.log(req.body);
+  console.log(updatedUser);
+
+  res.status(202).send(updatedUser);
+};
+
+
+/**
+ * Cambia el rol de un usuario entre "admin" y "customer".
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito del cambio de rol.
+ * @throws {Error} - Error al cambiar el rol del usuario.
+ */
+
+const changeUserRole = async (req, res) => {
+  const id = req.params.id;
+  let user = await Users.findByPk(id);
+  if (!user) {
+    res.status(404).send("Usuario no encontrado");
+  }
+  try {
+    user.role == "admin" ? (user.role = "customer") : (user.role = "admin");
+
+    user.save();
+    console.log(user.role);
+    res.send(
+      `Role del usuario con id:${id} cambiado exitosamente a ${user.role}`
+    );
+  } catch (error) {
+    res
+      .status(500)
+      .send(
+        "Ha ocurrido un error al intentar cambiar el role del usuario especificado."
+      );
+  }
+};
+
+
+/**
+ * Obtiene todos los usuarios .
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los usuarios.
+ * @throws {Error} - Error al obtener los usuarios.
+ */
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await Users.findAll({
+      attributes: ["id", "name", "address", "phone", "role"],
+    });
+
+    res.send(users);
+  } catch (error) {
+    res.status(500).send("No se encontraron usuarios, error del servidor.");
+  }
+};
+
+/**
+ * Elimina un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito de la eliminación del usuario.
+ * @throws {Error} - Error al eliminar el usuario.
+ */
+
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  let user = await Users.findByPk(id);
+  if (!user) {
+    return res.status(404).send("Usuario no encontrado");
+  }
+  try {
+    await user.destroy();
+    res.status(202).send(`Usuario con id: ${user.id} eliminado exitosamente.`);
+  } catch (error) {
+    res
+      .status(500)
+      .send("Ha ocurrido un error al intentar eliminar el usuario.");
+  }
+};
+
+module.exports = {
+  createUser,
+  loginUser,
+  logOut,
+  updateUser,
+  changeUserRole,
+  getAllUsers,
+  deleteUser,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#changeUserRole">changeUserRole</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#getAllProducts">getAllProducts</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getCartHistory">getCartHistory</a></li><li><a href="global.html#getCartItems">getCartItems</a></li><li><a href="global.html#getCategorie">getCategorie</a></li><li><a href="global.html#getSearchProduct">getSearchProduct</a></li><li><a href="global.html#getSingleProduct">getSingleProduct</a></li><li><a href="global.html#isAdmin">isAdmin</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#updateCartOrderStatusAndStock">updateCartOrderStatusAndStock</a></li><li><a href="global.html#updateQuantity">updateQuantity</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#validateUser">validateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jul 06 2023 00:20:42 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
