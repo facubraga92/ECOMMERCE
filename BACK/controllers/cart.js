@@ -3,10 +3,12 @@ const Cart = require("../models/Cart");
 const Cart_item = require("../models/Cart_item");
 const Products_variants = require("../models/Products_variants");
 const Products = require("../models/Products");
+const nodemailer = require("nodemailer");
+const { transporter, sendMail } = require("../utils/mailService");
 
 /**
  * Agrega un artículo al carrito.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Object} - Objeto JSON que indica si se agregó el artículo al carrito correctamente.
@@ -84,7 +86,7 @@ const addItem = async (req, res) => {
 
 /**
  * Elimina un artículo del carrito.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Object} - Objeto JSON que indica si se eliminó el artículo del carrito correctamente.
@@ -140,7 +142,7 @@ const removeItem = async (req, res) => {
 
 /**
  * Actualiza la cantidad de un artículo en el carrito.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -218,7 +220,7 @@ const updateQuantity = async (req, res) => {
 
 /**
  * Obtiene todos los artículos del carrito.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -274,10 +276,9 @@ const getCartItems = async (req, res) => {
   }
 };
 
-
 /**
  * Obtiene el historial de carritos de un usuario.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -345,10 +346,9 @@ const getCartHistory = async (req, res) => {
   }
 };
 
-
 /**
  * Actualiza el estado del pedido y el stock de los artículos de un carrito.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -356,11 +356,26 @@ const getCartHistory = async (req, res) => {
  * @throws {Error} - Error al actualizar el estado del pedido y el stock de los artículos.
  */
 
-
 const updateCartOrderStatusAndStock = async (req, res) => {
   try {
     const { order_status } = req.body;
-
+    const user = await Users.findOne({ where: { email: req.body.email } });
+    let mailOptions = {
+      from: "logistica@trashtalk.com",
+      to: user.email,
+      subject: "Confirmación de compra",
+      text: `Su compra en Trash Talk ha sido confirmada! Pronto recibira su paquete ${user.name}!`,
+      html: `<div style="max-width: 600px; margin: 0 auto; padding: 2rem; background-color: #f7fafc;">
+      <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">Su compra en Trash Talk ha sido confirmada! Pronto recibira su paquete!</h1>
+      <ul style="list-style-type: none; padding: 0; margin-bottom: 1rem;">
+          <li>Usuario: ${user.name}</li>
+          <li>User Email: ${user.email}</li>
+          <li >Productos adquiridos: ${user.email}</li>
+      </ul>
+    
+  </div>`,
+    };
+    console.log(user);
     // Buscar el carrito con order_status "pay_pending"
     const cart = await Cart.findOne({
       where: {
@@ -399,6 +414,8 @@ const updateCartOrderStatusAndStock = async (req, res) => {
       // Guardar los cambios en el stock del product_variant
       await productVariant.save();
     }
+
+    sendMail(mailOptions);
 
     res.json({
       message: `Se ha actualizado el order_status del carrito y el stock de los articulos correctamente.`,
