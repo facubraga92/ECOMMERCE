@@ -171,26 +171,31 @@ const editProduct = async (req, res) => {
       }
     );
 
-    // Editar las variantes
+    // Editar o crear las variantes
     for (const variant of variants) {
       const { id, size, color, stock } = variant;
 
-      await Products_variants.update(
-        { size, color, stock },
-        { where: { id, productId } }
-      );
+      if (id) {
+        // Si el id existe, actualizar la variante existente
+        await Products_variants.update(
+          { size, color, stock },
+          { where: { id, productId } }
+        );
+      } else {
+        // Si el id no existe, crear una nueva fila
+        await Products_variants.create({ size, color, stock, productId });
+      }
     }
 
-    res
-      .status(200)
-      .send({ success: true, message: "Producto editado correctamente." });
+    res.status(200).send({
+      success: true,
+      message: "Producto editado correctamente.",
+    });
   } catch (error) {
-    res
-      .status(500)
-      .send({
-        success: false,
-        message: "Hubo un error al editar el producto.",
-      });
+    res.status(500).send({
+      success: false,
+      message: "Hubo un error al editar el producto.",
+    });
   }
 };
 
