@@ -6,6 +6,7 @@ const {
   getCategorie,
   deleteProduct,
   editProduct,
+  searchProducts,
 } = require("../controllers/products");
 const isAdmin = require("../middlewares/isAdmin");
 const productsRouter = express.Router();
@@ -15,6 +16,8 @@ productsRouter.get("/", getAllProducts);
 productsRouter.get("/:id", getSingleProduct);
 
 productsRouter.get("/:name", getSearchProduct);
+
+productsRouter.get("/search", searchProducts);
 
 productsRouter.get("/categories/:category", getCategorie);
 
