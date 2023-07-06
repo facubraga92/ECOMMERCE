@@ -12,11 +12,12 @@ import Categories from "./components/Categories";
 import Gorras from "./components/Gorras";
 import Remeras from "./components/Remeras";
 import Buzos from "./components/Buzos";
+import Checkout from "./components/Checkout";
 
 function App() {
   const user = useSelector((state) => state.user);
   return (
-    <>
+    <div className="w-screen">
       <Navbar />
       <Routes>
         <Route path={"/"} element={<ProductsGrid />} />
@@ -29,12 +30,13 @@ function App() {
         <Route path={"/categories/1"} element={<Gorras />} />
         <Route path={"/categories/2"} element={<Remeras />} />
         <Route path={"/categories/3"} element={<Buzos />} />
+        <Route path={"/checkout"} element={<Checkout />} />
         <Route
           path={"/cart-history"}
           element={user.email ? <CartHistory /> : <Login />}
         />
       </Routes>
-    </>
+    </div>
   );
 }
 
