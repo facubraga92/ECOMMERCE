@@ -5,6 +5,9 @@
   margin: 0;
   padding: 0;
 }
+a{
+  color: white;
+}
 :root {
   --green: #ff2600;
 }
@@ -12,8 +15,9 @@
 .container {
   height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+
   padding: 2rem;
 }
 .container form {

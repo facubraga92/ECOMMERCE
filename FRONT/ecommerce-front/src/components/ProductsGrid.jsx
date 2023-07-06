@@ -7,6 +7,13 @@ const ProductsGrid = () => {
   const [products, setProducts] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState(null);
 
+
+  /**
+ * Realiza una solicitud al servidor para obtener los productos según la categoría filtrada
+ * y actualiza el estado de products.
+ *
+ * @param {string|null} filteredCategory - Categoría utilizada para filtrar los productos.
+ */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -17,7 +24,6 @@ const ProductsGrid = () => {
         }
 
         const response = await axios.get(url);
-        console.log(response);
         setProducts(response.data);
       } catch (error) {
         console.log("Error al obtener los productos:", error);
@@ -26,6 +32,10 @@ const ProductsGrid = () => {
     fetchData();
   }, [filteredCategory]);
 
+
+  /**
+ * Ordena los productos por su ID cuando el componente se monta por primera vez.
+ */
   useEffect(() => {
     setProducts((prevProducts) =>
       [...prevProducts].sort((a, b) => a.id - b.id)

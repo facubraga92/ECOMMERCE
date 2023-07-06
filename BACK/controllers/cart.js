@@ -4,6 +4,14 @@ const Cart_item = require("../models/Cart_item");
 const Products_variants = require("../models/Products_variants");
 const Products = require("../models/Products");
 
+/**
+ * Agrega un artículo al carrito.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se agregó el artículo al carrito correctamente.
+ */
+
 const addItem = async (req, res) => {
   try {
     const { email, productsVariantId, quantity } = req.body;
@@ -74,6 +82,14 @@ const addItem = async (req, res) => {
   }
 };
 
+/**
+ * Elimina un artículo del carrito.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se eliminó el artículo del carrito correctamente.
+ */
+
 const removeItem = async (req, res) => {
   try {
     const { email } = req.body;
@@ -122,6 +138,16 @@ const removeItem = async (req, res) => {
   }
 };
 
+/**
+ * Actualiza la cantidad de un artículo en el carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se actualizó la cantidad del artículo correctamente.
+ * @throws {Error} - Error al actualizar la cantidad del artículo.
+ */
+
 const updateQuantity = async (req, res) => {
   try {
     const { email, quantity } = req.body;
@@ -160,6 +186,23 @@ const updateQuantity = async (req, res) => {
         .json({ message: "Ítem del carrito no encontrado" });
     }
 
+    // Obtener la variante de producto y verificar el stock
+    const productVariant = await Products_variants.findByPk(
+      cartItem.productsVariantId
+    );
+
+    if (!productVariant) {
+      return res
+        .status(404)
+        .json({ message: "Variante de producto no encontrada" });
+    }
+
+    if (quantity > productVariant.stock) {
+      return res.status(400).json({
+        message: `No hay suficiente stock disponible, quedan ${productVariant.stock} unidades del producto solicitado.`,
+      });
+    }
+
     // Actualizar la cantidad del Cart_item
     cartItem.quantity = quantity;
     await cartItem.save();
@@ -172,6 +215,16 @@ const updateQuantity = async (req, res) => {
       .json({ message: "Error al actualizar la cantidad del ítem" });
   }
 };
+
+/**
+ * Obtiene todos los artículos del carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON con los artículos del carrito y el carrito actual.
+ * @throws {Error} - Error al obtener los artículos del carrito.
+ */
 
 const getCartItems = async (req, res) => {
   try {
@@ -220,6 +273,17 @@ const getCartItems = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los ítems del carrito" });
   }
 };
+
+
+/**
+ * Obtiene el historial de carritos de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON con el historial de carritos del usuario.
+ * @throws {Error} - Error al obtener el historial de carritos.
+ */
 
 const getCartHistory = async (req, res) => {
   try {
@@ -280,6 +344,18 @@ const getCartHistory = async (req, res) => {
     res.status(500).json({ message: "Error al obtener los ítems del carrito" });
   }
 };
+
+
+/**
+ * Actualiza el estado del pedido y el stock de los artículos de un carrito.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica si se actualizaron correctamente el estado del pedido y el stock de los artículos.
+ * @throws {Error} - Error al actualizar el estado del pedido y el stock de los artículos.
+ */
+
 
 const updateCartOrderStatusAndStock = async (req, res) => {
   try {

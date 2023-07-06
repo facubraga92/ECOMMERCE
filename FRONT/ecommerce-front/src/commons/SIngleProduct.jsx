@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../commons/Navbar";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
@@ -8,21 +7,20 @@ import { addToCart } from "../state/cart";
 //styles
 import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
-import Cart from "./Cart";
+import { setCartVisible } from "../state/cart";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   // implementando
-  const [visible, setVisible] = useState(false);
-
+  const visible = useSelector((state) => state.cart.cartVisible);
   const user = useSelector((state) => state.user);
   const { id } = useParams();
   const dispatch = useDispatch();
 
   //implementando
   const cartVisible = () => {
-    setVisible((prevState) => !prevState);
+    dispatch(setCartVisible(!visible));
   };
 
   useEffect(() => {
@@ -146,7 +144,6 @@ const SingleProduct = () => {
                   type="button"
                   onClick={handleAdd}
                 >
-                  {visible && <Cart />}
                   Add to bag
                 </button>
               </div>

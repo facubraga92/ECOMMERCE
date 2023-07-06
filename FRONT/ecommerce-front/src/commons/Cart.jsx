@@ -4,13 +4,13 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { setCartVisible } from "../state/cart";
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector((state) => state.user);
-  const [open, setOpen] = useState(true);
-
+  const visible = useSelector((state) => state.cart.cartVisible);
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -93,10 +93,13 @@ const Cart = () => {
       );
     }
   };
-
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+    <Transition.Root show={visible} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => dispatch(setCartVisible(false))}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -132,7 +135,7 @@ const Cart = () => {
                           <button
                             type="button"
                             className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => dispatch(setCartVisible(false))}
                           >
                             <span className="sr-only">Close panel</span>
                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -181,7 +184,9 @@ const Cart = () => {
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
                                     <p className="text-gray-500">
-                                      Stock total {item.products_variant.stock}
+                                      Stock total{" "}
+                                      {item.products_variant.stock -
+                                        item.quantity}
                                     </p>
 
                                     <div className="flex">
@@ -237,7 +242,7 @@ const Cart = () => {
                       </p>
                       <div className="mt-6">
                         <a
-                          href="#"
+                          href="/checkout"
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout
@@ -249,7 +254,7 @@ const Cart = () => {
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={() => setOpen(false)}
+                            onClick={() => dispatch(setCartVisible(false))}
                           >
                             Continue Shopping
                             <span aria-hidden="true"> &rarr;</span>

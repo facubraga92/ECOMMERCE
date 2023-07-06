@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/products.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/products.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Categories = require("../models/Categories");
+const Products = require("../models/Products");
+const Products_variants = require("../models/Products_variants");
+
+/**
+ * Obtiene todos los productos con sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los productos con sus variantes.
+ */
+
+const getAllProducts = (req, res) => {
+  Products.findAll({
+    include: {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    },
+    attributes: ["id", "name", "description", "price", "imgURL"],
+  })
+    .then((data) => res.status(200).send(data))
+    .catch((err) => console.log(err));
+};
+
+/**
+ * Obtiene un producto individual con sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función para pasar el control al siguiente middleware.
+ * @returns {Object} - Objeto JSON que contiene el producto individual con sus variantes.
+ */
+
+const getSingleProduct = (req, res, next) => {
+  const { id } = req.params;
+  Products.findByPk(id, {
+    include: {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    },
+  })
+    .then((data) => {
+      if (!data) {
+        const error = new Error("Product was not found!");
+        error.status = 404;
+        throw error;
+      }
+      res.status(200).send(data);
+    })
+    .catch(next);
+};
+
+/**
+ * Busca un producto por su nombre y obtiene sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene el producto encontrado con sus variantes.
+ */
+
+const getSearchProduct = (req, res) => {
+  const { name } = req.params;
+
+  Products.findOne(name, {
+    where: {
+      name: name,
+    },
+    include: {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    },
+  })
+    .then((data) => {
+      if (!data) {
+        const error = new Error("Product was not found!");
+        error.status = 404;
+        throw error;
+      }
+      res.status(200).send(data);
+    })
+    .catch(next);
+};
+
+/**
+ * Obtiene todos los productos de una categoría con sus variantes.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los productos de la categoría con sus variantes.
+ * @throws {Error} - Error al obtener los productos de la categoría.
+ */
+
+const getCategorie =  async (req, res) => {
+  const category = req.params.category.toLowerCase();
+
+  try {
+    const categoryInstance = await Categories.findOne({
+      where: { name: category },
+    });
+
+    if (!categoryInstance) {
+      return res.status(404).json({ error: "Categoría no encontrada" });
+    }
+
+    const products = await Products.findAll({
+      where: { categoryId: categoryInstance.id },
+      include:[ { model: Categories, attributes: ["name"] 
+    }, {
+      model: Products_variants,
+      attributes: ["id", "size", "color", "stock"],
+    }],
+
+    
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+module.exports = {
+  getAllProducts,
+  getSingleProduct,
+  getSearchProduct,
+  getCategorie,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addItem">addItem</a></li><li><a href="global.html#changeUserRole">changeUserRole</a></li><li><a href="global.html#createUser">createUser</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#getAllProducts">getAllProducts</a></li><li><a href="global.html#getAllUsers">getAllUsers</a></li><li><a href="global.html#getCartHistory">getCartHistory</a></li><li><a href="global.html#getCartItems">getCartItems</a></li><li><a href="global.html#getCategorie">getCategorie</a></li><li><a href="global.html#getSearchProduct">getSearchProduct</a></li><li><a href="global.html#getSingleProduct">getSingleProduct</a></li><li><a href="global.html#isAdmin">isAdmin</a></li><li><a href="global.html#logOut">logOut</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#removeItem">removeItem</a></li><li><a href="global.html#updateCartOrderStatusAndStock">updateCartOrderStatusAndStock</a></li><li><a href="global.html#updateQuantity">updateQuantity</a></li><li><a href="global.html#updateUser">updateUser</a></li><li><a href="global.html#validateUser">validateUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jul 06 2023 00:20:42 GMT-0300 (hora estándar de Argentina)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

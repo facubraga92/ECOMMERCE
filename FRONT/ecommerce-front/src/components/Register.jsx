@@ -3,36 +3,55 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-//Estilos
+// Estilos
 import "../styles/register.css";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repassword, setRepassword] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [code, setCode] = useState("");
+  const [showCodeInput, setShowCodeInput] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:3000/api/users/register", {
-        name: name,
-        password: password,
-        email: email,
-        address: address,
-        phone: phone,
-      })
-      .then((res) => res.data)
-      .then(() => {
-        alert("Registro de usuario exitoso!");
-        navigate("/login");
-      })
+    if (password === repassword) {
+      axios
+        .post("http://localhost:3000/api/users/register", {
+          name: name,
+          password: password,
+          email: email,
+          address: address,
+          phone: phone,
+          code: code,
+        })
+        .then((res) => {
+          const { success, message } = res.data;
+          if (success) {
+            alert(message);
+            navigate("/login");
+          } else {
+            setErrorMessage(message);
+          }
+        })
+        .catch((error) => {
+          console.log("Error registering", error);
+        });
+    } else {
+      setErrorMessage("Las contraseñas no coinciden");
+    }
+  };
 
-      .catch((error) => {
-        console.log("Error registering", error);
-      });
+  const handleCodeLinkClick = () => {
+    setShowCodeInput(!showCodeInput);
+    setCode("");
+    setErrorMessage("");
   };
 
   return (
@@ -42,7 +61,7 @@ const Register = () => {
         <div className="email t-input">
           <input
             type="email"
-            required=""
+            required
             id="email"
             placeholder="."
             value={email}
@@ -54,7 +73,7 @@ const Register = () => {
         <div className="password t-input">
           <input
             type="password"
-            required=""
+            required
             id="password"
             placeholder="."
             value={password}
@@ -63,6 +82,19 @@ const Register = () => {
           <label htmlFor="password">Contraseña</label>
           <div className="b-line"></div>
         </div>
+        <div className="password t-input">
+          <input
+            type="password"
+            required
+            id="repassword"
+            placeholder="."
+            value={repassword}
+            onChange={(e) => setRepassword(e.target.value)}
+          />
+          <label htmlFor="repassword">Confirmar Contraseña</label>
+          <div className="b-line"></div>
+        </div>
+        {password !== repassword && <p>Las contraseñas no coinciden</p>}
         <div className="name t-input">
           <input
             type="text"
@@ -82,7 +114,7 @@ const Register = () => {
             onChange={(e) => setAddress(e.target.value)}
             required
           />
-          <label htmlFor="address">Direccion</label>
+          <label htmlFor="address">Dirección</label>
           <div className="b-line"></div>
         </div>
         <div className="phone t-input">
@@ -93,16 +125,39 @@ const Register = () => {
             onChange={(e) => setPhone(e.target.value)}
             required
           />
-          <label htmlFor="phone">Telefono</label>
+          <label htmlFor="phone">Teléfono</label>
           <div className="b-line"></div>
         </div>
         <div className="not_account">
           <label>
             ¿Ya tienes una cuenta?{" "}
-            <Link to={"/login"} className="login">
+            <Link to={"/login"} className="text-white">
               Inicia sesión.
             </Link>
           </label>
+          <br />
+          <div className="mt-2">
+            <label className="mt-4">
+              ¿Tienes un código?{" "}
+              <span className="text-white" onClick={handleCodeLinkClick}>
+                Ingresar código.
+              </span>
+            </label>
+          </div>
+          {showCodeInput && (
+            <div className="code t-input">
+              <input
+                type="text"
+                placeholder="."
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                required
+              />
+              <label htmlFor="code">Código</label>
+              <div className="b-line"></div>
+            </div>
+          )}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
         <button type="submit">Registrar</button>
       </form>
