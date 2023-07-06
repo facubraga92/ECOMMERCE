@@ -1,21 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../commons/ProductCard";
-import Navbar from "../commons/Navbar";
-import '../styles/ProductGrid.css'
-
+import "../styles/ProductGrid.css";
+import { useSelector } from "react-redux";
 
 const ProductsGrid = () => {
+  const user = useSelector((state) => state.user);
+
   const [products, setProducts] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState(null);
 
-
   /**
- * Realiza una solicitud al servidor para obtener los productos según la categoría filtrada
- * y actualiza el estado de products.
- *
- * @param {string|null} filteredCategory - Categoría utilizada para filtrar los productos.
- */
+   * Realiza una solicitud al servidor para obtener los productos según la categoría filtrada
+   * y actualiza el estado de products.
+   *
+   * @param {string|null} filteredCategory - Categoría utilizada para filtrar los productos.
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +26,9 @@ const ProductsGrid = () => {
         }
 
         const response = await axios.get(url);
-        setProducts(response.data);
+        const sortedProducts = response.data.sort((a, b) => a.id - b.id);
+
+        setProducts(sortedProducts);
       } catch (error) {
         console.log("Error al obtener los productos:", error);
       }
@@ -34,10 +36,9 @@ const ProductsGrid = () => {
     fetchData();
   }, [filteredCategory]);
 
-
   /**
- * Ordena los productos por su ID cuando el componente se monta por primera vez.
- */
+   * Ordena los productos por su ID cuando el componente se monta por primera vez.
+   */
   useEffect(() => {
     setProducts((prevProducts) =>
       [...prevProducts].sort((a, b) => a.id - b.id)
@@ -48,10 +49,13 @@ const ProductsGrid = () => {
     setFilteredCategory(category);
   };
 
+  const handleAddProductClick = () => {
+    // Lógica para agregar un nuevo producto
+  };
+
   return (
     <>
-      <div >
-        {/* <Navbar /> */}
+      <div>
         <h1 className="text-6xl mb-6 fontClass">Productos</h1>
         <div className="flex gap-2 mb-4 space-x-0.5 items-center justify-center ">
           <button
@@ -80,6 +84,16 @@ const ProductsGrid = () => {
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {user.role === "admin" && (
+            <div className="bg-transparent p-6 rounded shadow-md mt-4">
+              <button
+                onClick={handleAddProductClick}
+                className="w-[90%] h-[90%] text-center bg-opacity-70  text-white bg-red-600 hover:bg-red-700 rounded-3xl py-2 px-4"
+              >
+                Agregar nuevo producto
+              </button>
+            </div>
+          )}
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -90,7 +104,3 @@ const ProductsGrid = () => {
 };
 
 export default ProductsGrid;
-
-
-
-

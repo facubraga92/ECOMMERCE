@@ -131,7 +131,7 @@ const Register = () => {
         <div className="not_account">
           <label>
             ¿Ya tienes una cuenta?{" "}
-            <Link to={"/login"} className="text-white">
+            <Link to={"/login"} className="text-white cursor-default">
               Inicia sesión.
             </Link>
           </label>
@@ -139,9 +139,9 @@ const Register = () => {
           <div className="mt-2">
             <label className="mt-4">
               ¿Tienes un código?{" "}
-              <span className="text-white" onClick={handleCodeLinkClick}>
+              <a className="text-white cursor-default" onClick={handleCodeLinkClick}>
                 Ingresar código.
-              </span>
+              </a>
             </label>
           </div>
           {showCodeInput && (

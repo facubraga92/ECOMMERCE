@@ -14,6 +14,7 @@ import Remeras from "./components/Remeras";
 import Buzos from "./components/Buzos";
 import Checkout from "./components/Checkout";
 import AdminView from "./components/AdminView";
+import EditProduct from "./commons/EditProduct";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -40,6 +41,11 @@ function App() {
           path={"/admin"}
           element={user.role == "admin" ? <AdminView /> : <ProductsGrid />}
         />
+         <Route
+          path={"/admin/editproduct/:id"}
+          element={user.role == "admin" ? <EditProduct /> : <ProductsGrid />}
+        />
+
       </Routes>
     </div>
   );

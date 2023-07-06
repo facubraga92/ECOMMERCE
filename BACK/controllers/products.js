@@ -4,7 +4,7 @@ const Products_variants = require("../models/Products_variants");
 
 /**
  * Obtiene todos los productos con sus variantes.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Object} - Objeto JSON que contiene todos los productos con sus variantes.
@@ -24,7 +24,7 @@ const getAllProducts = (req, res) => {
 
 /**
  * Obtiene un producto individual con sus variantes.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @param {Function} next - Función para pasar el control al siguiente middleware.
@@ -52,7 +52,7 @@ const getSingleProduct = (req, res, next) => {
 
 /**
  * Busca un producto por su nombre y obtiene sus variantes.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  * @returns {Object} - Objeto JSON que contiene el producto encontrado con sus variantes.
@@ -83,7 +83,7 @@ const getSearchProduct = (req, res) => {
 
 /**
  * Obtiene todos los productos de una categoría con sus variantes.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -91,7 +91,7 @@ const getSearchProduct = (req, res) => {
  * @throws {Error} - Error al obtener los productos de la categoría.
  */
 
-const getCategorie =  async (req, res) => {
+const getCategorie = async (req, res) => {
   const category = req.params.category.toLowerCase();
 
   try {
@@ -105,13 +105,13 @@ const getCategorie =  async (req, res) => {
 
     const products = await Products.findAll({
       where: { categoryId: categoryInstance.id },
-      include:[ { model: Categories, attributes: ["name"] 
-    }, {
-      model: Products_variants,
-      attributes: ["id", "size", "color", "stock"],
-    }],
-
-    
+      include: [
+        { model: Categories, attributes: ["name"] },
+        {
+          model: Products_variants,
+          attributes: ["id", "size", "color", "stock"],
+        },
+      ],
     });
 
     res.json(products);
@@ -119,10 +119,86 @@ const getCategorie =  async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
-}
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const product = await Products.findByPk(id, {
+      include: {
+        model: Products_variants,
+        attributes: ["id", "size", "color", "stock"],
+      },
+    });
+
+    if (!product) {
+      const error = new Error("Product was not found!");
+      error.status = 404;
+      throw error;
+    }
+
+    await product.destroy();
+
+    res.status(200).send({
+      success: true,
+      message: "Producto eliminado correctamente.",
+      productName: product.name,
+    });
+  } catch (error) {
+    res.status(error.status || 500).send({
+      success: false,
+      message: error.message || "Hubo un error al eliminar el producto.",
+    });
+  }
+};
+
+const editProduct = async (req, res) => {
+  const productId = req.params.id;
+  const { name, description, price, imgURL, variants } = req.body;
+
+  try {
+    // Editar el producto principal
+    await Products.update(
+      {
+        name,
+        description,
+        price,
+        imgURL,
+      },
+      {
+        where: { id: productId },
+      }
+    );
+
+    // Editar las variantes
+    for (const variant of variants) {
+      const { id, size, color, stock } = variant;
+
+      await Products_variants.update(
+        { size, color, stock },
+        { where: { id, productId } }
+      );
+    }
+
+    res
+      .status(200)
+      .send({ success: true, message: "Producto editado correctamente." });
+  } catch (error) {
+    res
+      .status(500)
+      .send({
+        success: false,
+        message: "Hubo un error al editar el producto.",
+      });
+  }
+};
+
 module.exports = {
   getAllProducts,
   getSingleProduct,
   getSearchProduct,
   getCategorie,
+  deleteProduct,
+  editProduct,
 };

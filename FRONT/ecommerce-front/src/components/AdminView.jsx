@@ -76,25 +76,25 @@ const AdminView = () => {
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               ID
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               Nombre
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               Email
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               Dirección
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               Teléfono
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Rol
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Admin
             </th>
-            <th className="px-6 py-3 bg-gray-50 text-left text-xs font-mediumtext-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
               Eliminar
             </th>
           </tr>
@@ -102,12 +102,12 @@ const AdminView = () => {
         <tbody className="bg-white text-black divide-y divide-gray-200">
           {users.map((user) => (
             <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap">{user.id}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{user.address}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{user.phone}</td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap text-center">{user.id}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">{user.name}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">{user.email}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">{user.address}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">{user.phone}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
                 <input
                   type="checkbox"
                   checked={user.role === "admin"}
@@ -115,7 +115,7 @@ const AdminView = () => {
                   className="form-checkbox h-5 w-5 text-indigo-600"
                 />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap text-center">
                 <button
                   onClick={() => handleDeleteUser(user.id)}
                   className="text-red-600 hover:text-red-800"
@@ -129,6 +129,7 @@ const AdminView = () => {
       </table>
     </div>
   );
+  
 };
 
 export default AdminView;
