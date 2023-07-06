@@ -9,8 +9,8 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState([]);
   const user = useSelector((state) => state.user);
-  const visible=useSelector((state)=>state.cart.cartVisible)
- const dispatch=useDispatch()
+  const visible = useSelector((state) => state.cart.cartVisible);
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -95,7 +95,11 @@ const Cart = () => {
   };
   return (
     <Transition.Root show={visible} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={()=>dispatch(setCartVisible(false))}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => dispatch(setCartVisible(false))}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -238,7 +242,7 @@ const Cart = () => {
                       </p>
                       <div className="mt-6">
                         <a
-                          href="#"
+                          href="/checkout"
                           className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                         >
                           Checkout

@@ -1,6 +1,10 @@
 .navbar {
-  background-color: transparent;
+  background-color: black;
   color: #fff;
+  background-image: url("../assets/TT_Blanco.png");
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .navbar-container {
