@@ -9,20 +9,21 @@ import { addToCart } from "../state/cart";
 import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
 import Cart from "./Cart";
+import { setCartVisible } from "../state/cart";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   // implementando
-  const [visible, setVisible] = useState(false);
-
+  const visible=useSelector((state)=>state.cart.cartVisible)
   const user = useSelector((state) => state.user);
   const { id } = useParams();
   const dispatch = useDispatch();
 
+
   //implementando
   const cartVisible = () => {
-    setVisible((prevState) => !prevState);
+    dispatch(setCartVisible(!visible))
   };
 
   useEffect(() => {
