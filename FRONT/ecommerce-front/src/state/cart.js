@@ -2,9 +2,12 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 
 export const addToCart = createAction("ADD_TO_CART");
 export const removeToCart = createAction("REMOVE_TO_CART");
+export const setCartVisible=createAction('SET_CART_VISIBLE')
 
 export const cartInitialState = {
   items: [],
+  cartVisible:false,
+
 };
 
 export const cartReducer = createReducer(cartInitialState, (builder) => {
@@ -23,4 +26,6 @@ export const cartReducer = createReducer(cartInitialState, (builder) => {
     const itemId = action.payload;
     state.items = state.items.filter((item) => item.id !== itemId);
   });
+
+  builder.addCase(setCartVisible,(state,action)=> { state.cartVisible = action.payload})
 });

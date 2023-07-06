@@ -7,12 +7,12 @@ import { setUser, userInitialState } from "../state/user.js";
 import { useEffect } from "react";
 import "../styles/navbar.css";
 import Cart from "../commons/Cart.jsx";
-
+import { setCartVisible } from "../state/cart";
 export default function Navbar() {
   const location = useLocation().pathname;
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [visible, setVisible] = useState(false);
+  const visible=useSelector((state)=>state.cart.cartVisible)
 
   useEffect(() => {
     axios
@@ -41,7 +41,7 @@ export default function Navbar() {
   };
 
   const cartVisible = () => {
-    setVisible((prevState) => !prevState);
+    dispatch(setCartVisible(!visible));
   };
   return (
     <nav className="navbar">
