@@ -2,6 +2,28 @@ const Categories = require("../models/Categories");
 const Products = require("../models/Products");
 const Products_variants = require("../models/Products_variants");
 
+/** Buscar Productos */
+const searchProducts = async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const products = await Products.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${query}%`,
+        },
+      },
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al buscar los productos",
+    });
+  }
+};
+
 /**
  * Obtiene todos los productos con sus variantes.
  *
@@ -185,12 +207,10 @@ const editProduct = async (req, res) => {
       .status(200)
       .send({ success: true, message: "Producto editado correctamente." });
   } catch (error) {
-    res
-      .status(500)
-      .send({
-        success: false,
-        message: "Hubo un error al editar el producto.",
-      });
+    res.status(500).send({
+      success: false,
+      message: "Hubo un error al editar el producto.",
+    });
   }
 };
 
@@ -201,4 +221,5 @@ module.exports = {
   getCategorie,
   deleteProduct,
   editProduct,
+  searchProducts,
 };
