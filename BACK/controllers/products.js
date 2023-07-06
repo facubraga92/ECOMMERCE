@@ -1,18 +1,24 @@
+const { Sequelize } = require("sequelize");
 const Categories = require("../models/Categories");
 const Products = require("../models/Products");
 const Products_variants = require("../models/Products_variants");
 
 /** Buscar Productos */
 const searchProducts = async (req, res) => {
-  const { query } = req.query;
+  const { name } = req.params;
 
   try {
     const products = await Products.findAll({
       where: {
         name: {
-          [Op.like]: `%${query}%`,
+          [Sequelize.Op.like]: `%${name}%`,
         },
       },
+      include: {
+        model: Products_variants,
+        attributes: ["id", "size", "color", "stock"],
+      },
+      attributes: ["id", "name", "description", "price", "imgURL"],
     });
 
     res.json(products);
@@ -23,7 +29,6 @@ const searchProducts = async (req, res) => {
     });
   }
 };
-
 /**
  * Obtiene todos los productos con sus variantes.
  *

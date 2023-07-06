@@ -17,7 +17,7 @@ productsRouter.get("/:id", getSingleProduct);
 
 productsRouter.get("/:name", getSearchProduct);
 
-productsRouter.get("/search", searchProducts);
+productsRouter.get("/search/:name", searchProducts);
 
 productsRouter.get("/categories/:category", getCategorie);
 
