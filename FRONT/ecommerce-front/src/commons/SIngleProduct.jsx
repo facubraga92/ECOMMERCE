@@ -147,7 +147,6 @@ const SingleProduct = () => {
                   type="button"
                   onClick={handleAdd}
                 >
-                  {visible && <Cart />}
                   Add to bag
                 </button>
               </div>
