@@ -5,9 +5,13 @@ crear un archivo .env en la raiz de la carpeta BACK. Debe contener la siguiente 
 DB_PORT = 3000
 DB_HOST = 'localhost'
 DB_NAME = 'trashdb'
-DB_USER = 'null'
-DB_PASSWORD = 'null'
-DB_DIALECT = 'postgres'
+DB_USER = 'facubraga92'
+DB_PASSWORD = '123456'
+DB_DIALECT = "postgres"
 
 # JWT
 SECRET_TOKEN = 'TRASHTALK'
+
+
+#REGISTRO ADMIN
+ADMIN_CODE = "trashtalk2023"

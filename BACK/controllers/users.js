@@ -1,11 +1,11 @@
+const { ADMIN_CODE } = require("../config");
 const { generateToken } = require("../config/tokens");
 const Users = require("../models/Users");
 const bcrypt = require("bcrypt");
 
-
 /**
  * Crea un nuevo usuario.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -15,22 +15,51 @@ const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
   try {
-    let user = await Users.findOne({ where: { email: req.body.email } });
-    if (user) {
-      res.status(401).send("Ya existe un usuario registrado con ese email.");
-    } else {
-      const createdUser = await Users.create(req.body);
+    const { name, email, password, address, phone, code } = req.body;
 
-      res.send(`Usuario creado con éxito:${createdUser.email}`).status(201);
+    let user = await Users.findOne({ where: { email: email } });
+    if (user) {
+      return res
+        .status(401)
+        .send("Ya existe un usuario registrado con ese email.");
+    }
+
+    if (code === ADMIN_CODE) {
+      const createdUser = await Users.create({ ...req.body, role: "admin" });
+      return res
+        .send({
+          success: true,
+          message: `Usuario con privilegios de Administrador creado con éxito: ${createdUser.email}`,
+        })
+        .status(201);
+    } else if (code === "") {
+      const createdUser = await Users.create(req.body);
+      return res
+        .send({
+          success: true,
+          message: `Usuario creado con éxito: ${createdUser.email}`,
+        })
+        .status(201);
+    } else {
+      return res
+        .send({
+          success: false,
+          message:
+            "Código incorrecto. Introduce un código válido o deja el campo en blanco.",
+        })
+        .status(400);
     }
   } catch (error) {
-    res.status(400).send("Hubo un error en el registro");
+    return res.status(400).send({
+      success: false,
+      message: "Hubo un error en el registro",
+    });
   }
 };
 
 /**
  * Inicia sesión de un usuario.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -49,6 +78,7 @@ const loginUser = async (req, res) => {
   } else {
     if (await user.validatePassword(req.body.password)) {
       const payload = {
+        id: user.id,
         name: user.name,
         email: user.email,
         adress: user.adress,
@@ -66,7 +96,7 @@ const loginUser = async (req, res) => {
 
 /**
  * Cierra la sesión de un usuario.
- * 
+ *
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
  */
@@ -76,10 +106,9 @@ const logOut = (req, res) => {
   res.sendStatus(204);
 };
 
-
 /**
  * Actualiza la información de un usuario.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -114,10 +143,9 @@ const updateUser = async (req, res) => {
   res.status(202).send(updatedUser);
 };
 
-
 /**
  * Cambia el rol de un usuario entre "admin" y "customer".
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -148,10 +176,9 @@ const changeUserRole = async (req, res) => {
   }
 };
 
-
 /**
  * Obtiene todos los usuarios .
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
@@ -162,7 +189,7 @@ const changeUserRole = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll({
-      attributes: ["id", "name", "address", "phone", "role"],
+      attributes: ["id", "name", "email", "address", "phone", "role"],
     });
 
     res.send(users);
@@ -173,7 +200,7 @@ const getAllUsers = async (req, res) => {
 
 /**
  * Elimina un usuario.
- * 
+ *
  * @async
  * @param {Object} req - Objeto de solicitud HTTP.
  * @param {Object} res - Objeto de respuesta HTTP.
