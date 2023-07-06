@@ -8,6 +8,7 @@ import { addToCart } from "../state/cart";
 import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
 import { setCartVisible } from "../state/cart";
+const defaultImage = "/defaultImg2.jpg";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
@@ -22,6 +23,7 @@ const SingleProduct = () => {
   const cartVisible = () => {
     dispatch(setCartVisible(!visible));
   };
+  console.log(product);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -82,9 +84,9 @@ const SingleProduct = () => {
     <>
       {product ? (
         <div className="flex p-6 font-mono bg-white">
-          <div className="flex-none w-48 mb-10 relative z-10  before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
+          <div className="flex-none w-48 mb-10 relative z-10  ">
             <img
-              src={TTLogo}
+              src={product.imgURL?.[0] ? product.imgURL[0] : defaultImage}
               alt=""
               className="absolute z-10 inset-0 w-full h-full object-cover rounded-lg"
               loading="lazy"

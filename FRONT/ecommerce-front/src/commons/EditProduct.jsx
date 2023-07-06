@@ -13,6 +13,11 @@ const EditProduct = () => {
   const [price, setPrice] = useState("");
   const [imgURLs, setImgURLs] = useState([]);
   const [variants, setVariants] = useState([]);
+  const [newVariant, setNewVariant] = useState({
+    size: "",
+    color: "",
+    stock: 0,
+  });
 
   useEffect(() => {
     // Cargar los datos del producto al montar el componente
@@ -29,9 +34,19 @@ const EditProduct = () => {
       setName(productData.name);
       setDescription(productData.description);
       setPrice(productData.price);
-      setImgURLs(productData.imgURL);
-      setVariants(productData.products_variants);
-      console.log(productData);
+      setImgURLs(productData.imgURL || []);
+
+      // Transformar las variantes para que coincidan con la estructura esperada
+      const transformedVariants = productData.products_variants.map(
+        (variant) => ({
+          id: variant.id,
+          size: variant.size,
+          color: variant.color,
+          stock: variant.stock,
+        })
+      );
+      console.log(productData.imgURL);
+      setVariants(transformedVariants);
     } catch (error) {
       console.log("Error al cargar los datos del producto:", error);
     }
@@ -42,6 +57,19 @@ const EditProduct = () => {
       const updatedVariants = [...prevVariants];
       updatedVariants[index][field] = value;
       return updatedVariants;
+    });
+  };
+
+  const handleAddURL = () => {
+    if (imgURLs[imgURLs.length - 1] !== "") {
+      setImgURLs((prevImgURLs) => [...prevImgURLs, ""]);
+    }
+  };
+  const handleRemoveURL = (index) => {
+    setImgURLs((prevImgURLs) => {
+      const updatedImgURLs = [...prevImgURLs];
+      updatedImgURLs.splice(index, 1);
+      return updatedImgURLs;
     });
   };
 
@@ -72,7 +100,7 @@ const EditProduct = () => {
       console.log("Error al editar el producto:", error);
     }
   };
-
+  console.log("imgURLS", imgURLs);
   return (
     <div>
       <h2>Editar Producto</h2>
@@ -104,31 +132,23 @@ const EditProduct = () => {
         </div>
         <div>
           <label>URL de Imagen:</label>
-          {imgURLs &&
-            imgURLs.map((imgURL, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  value={imgURL}
-                  onChange={(e) =>
-                    setImgURLs((prevImgURLs) => {
-                      const updatedImgURLs = [...prevImgURLs];
-                      updatedImgURLs[index] = e.target.value;
-                      return updatedImgURLs;
-                    })
-                  }
-                />
-                {index === imgURLs.length - 1 && (
-                  <button
-                    onClick={() =>
-                      setImgURLs((prevImgURLs) => [...prevImgURLs, ""])
-                    }
-                  >
-                    Agregar URL
-                  </button>
-                )}
-              </div>
-            ))}
+          {imgURLs.map((imgURL, index) => (
+            <div key={index}>
+              <input
+                type="text"
+                value={imgURL}
+                onChange={(e) => {
+                  const updatedImgURLs = [...imgURLs];
+                  updatedImgURLs[index] = e.target.value;
+                  setImgURLs(updatedImgURLs);
+                }}
+              />
+              {imgURLs.length !== 0 && (
+                <button onClick={() => handleRemoveURL(index)}>x</button>
+              )}
+            </div>
+          ))}
+          <button onClick={handleAddURL}>Agregar URL</button>
         </div>
         <div>
           <h3>Variantes</h3>
@@ -168,6 +188,8 @@ const EditProduct = () => {
             </div>
           ))}
           <button
+            type="button"
+            className="bg-red-600 hover:bg-red-700 mb-2"
             onClick={() =>
               setVariants((prevVariants) => [
                 ...prevVariants,
@@ -178,7 +200,9 @@ const EditProduct = () => {
             Agregar Variante
           </button>
         </div>
-        <button type="submit">Guardar Cambios</button>
+        <button type="submit" className="bg-red-600 hover:bg-red-700">
+          Guardar Cambios
+        </button>
       </form>
     </div>
   );

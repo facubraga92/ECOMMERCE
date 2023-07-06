@@ -10,6 +10,7 @@ const Cart = () => {
   const [cart, setCart] = useState([]);
   const user = useSelector((state) => state.user);
   const visible = useSelector((state) => state.cart.cartVisible);
+  const defaultImage = "/defaultImg2.jpg";
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -154,7 +155,7 @@ const Cart = () => {
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
                                     src={
-                                      item.products_variant.product.imgURL?.[0]
+                                      item.products_variant.product.imgURL?.[0] ? (item.products_variant.product.imgURL?.[0]) : defaultImage
                                     }
                                     alt={item.imageAlt}
                                     className="h-full w-full object-cover object-center"
@@ -180,6 +181,9 @@ const Cart = () => {
                                     </div>
                                     <p className="mt-1 text-sm text-gray-500">
                                       {item.products_variant.color}
+                                    </p>
+                                    <p className="mt-1 text-sm text-gray-500">
+                                      {item.products_variant.size}
                                     </p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
