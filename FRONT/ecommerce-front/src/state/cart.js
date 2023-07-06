@@ -1,15 +1,35 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-
+/**
+ * Acción para agregar un elemento al carrito.
+ */
 export const addToCart = createAction("ADD_TO_CART");
+/**
+ * Acción para remover un element del carrito
+ */
 export const removeToCart = createAction("REMOVE_TO_CART");
+/**
+ * Acción para establecer la visibilidad del carrito.
+ */
 export const setCartVisible=createAction('SET_CART_VISIBLE')
 
+
+/**
+ * Estado inicial del carrito.
+ * @property {Array} items - Lista de elementos en el carrito.
+ * @property {boolean} cartVisible - Indicador de la visibilidad del carrito.
+ */
 export const cartInitialState = {
   items: [],
   cartVisible:false,
 
 };
 
+
+/**
+ * Reductor del carrito.
+ * @param {Object} state - Estado actual del carrito.
+ * @param {Object} action - Acción despachada.
+ */
 export const cartReducer = createReducer(cartInitialState, (builder) => {
   builder.addCase(addToCart, (state, action) => {
     const newItem = action.payload;

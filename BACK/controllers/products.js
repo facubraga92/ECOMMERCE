@@ -2,6 +2,14 @@ const Categories = require("../models/Categories");
 const Products = require("../models/Products");
 const Products_variants = require("../models/Products_variants");
 
+/**
+ * Obtiene todos los productos con sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los productos con sus variantes.
+ */
+
 const getAllProducts = (req, res) => {
   Products.findAll({
     include: {
@@ -13,6 +21,15 @@ const getAllProducts = (req, res) => {
     .then((data) => res.status(200).send(data))
     .catch((err) => console.log(err));
 };
+
+/**
+ * Obtiene un producto individual con sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función para pasar el control al siguiente middleware.
+ * @returns {Object} - Objeto JSON que contiene el producto individual con sus variantes.
+ */
 
 const getSingleProduct = (req, res, next) => {
   const { id } = req.params;
@@ -32,6 +49,14 @@ const getSingleProduct = (req, res, next) => {
     })
     .catch(next);
 };
+
+/**
+ * Busca un producto por su nombre y obtiene sus variantes.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene el producto encontrado con sus variantes.
+ */
 
 const getSearchProduct = (req, res) => {
   const { name } = req.params;
@@ -55,6 +80,16 @@ const getSearchProduct = (req, res) => {
     })
     .catch(next);
 };
+
+/**
+ * Obtiene todos los productos de una categoría con sus variantes.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los productos de la categoría con sus variantes.
+ * @throws {Error} - Error al obtener los productos de la categoría.
+ */
 
 const getCategorie =  async (req, res) => {
   const category = req.params.category.toLowerCase();

@@ -2,6 +2,17 @@ const { generateToken } = require("../config/tokens");
 const Users = require("../models/Users");
 const bcrypt = require("bcrypt");
 
+
+/**
+ * Crea un nuevo usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito del registro.
+ * @throws {Error} - Error en el registro del usuario.
+ */
+
 const createUser = async (req, res) => {
   try {
     let user = await Users.findOne({ where: { email: req.body.email } });
@@ -16,6 +27,15 @@ const createUser = async (req, res) => {
     res.status(400).send("Hubo un error en el registro");
   }
 };
+
+/**
+ * Inicia sesión de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene los datos del usuario y un token de autenticación.
+ */
 
 const loginUser = async (req, res) => {
   let user = await Users.findOne({
@@ -44,10 +64,27 @@ const loginUser = async (req, res) => {
   }
 };
 
+/**
+ * Cierra la sesión de un usuario.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ */
+
 const logOut = (req, res) => {
   res.clearCookie("token");
   res.sendStatus(204);
 };
+
+
+/**
+ * Actualiza la información de un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene los datos actualizados del usuario.
+ */
 
 const updateUser = async (req, res) => {
   const { email, password } = req.body;
@@ -77,6 +114,17 @@ const updateUser = async (req, res) => {
   res.status(202).send(updatedUser);
 };
 
+
+/**
+ * Cambia el rol de un usuario entre "admin" y "customer".
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito del cambio de rol.
+ * @throws {Error} - Error al cambiar el rol del usuario.
+ */
+
 const changeUserRole = async (req, res) => {
   const id = req.params.id;
   let user = await Users.findByPk(id);
@@ -100,6 +148,17 @@ const changeUserRole = async (req, res) => {
   }
 };
 
+
+/**
+ * Obtiene todos los usuarios .
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que contiene todos los usuarios.
+ * @throws {Error} - Error al obtener los usuarios.
+ */
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll({
@@ -111,6 +170,16 @@ const getAllUsers = async (req, res) => {
     res.status(500).send("No se encontraron usuarios, error del servidor.");
   }
 };
+
+/**
+ * Elimina un usuario.
+ * 
+ * @async
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @returns {Object} - Objeto JSON que indica el éxito de la eliminación del usuario.
+ * @throws {Error} - Error al eliminar el usuario.
+ */
 
 const deleteUser = async (req, res) => {
   const id = req.params.id;

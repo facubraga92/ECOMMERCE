@@ -1,5 +1,13 @@
 const { validateToken } = require("../config/tokens");
 
+/**
+ * Middleware para verificar si el usuario tiene permisos de administrador.
+ * 
+ * @param {Object} req - Objeto de solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta HTTP.
+ * @param {Function} next - Función para pasar al siguiente middleware o controlador.
+ */
+
 const isAdmin = (req, res, next) => {
   // Obtener el token del encabezado de la solicitud o de las cookies
   const token = req.cookies.token;
@@ -16,7 +24,7 @@ const isAdmin = (req, res, next) => {
     // Verificar si el usuario tiene un rol de "admin"
     if (payload.role === "admin") {
       req.user = payload; // Asignar el payload al objeto req.user
-      return next(); // Continuar con la siguiente función de middleware
+      return next(); 
     }
 
     // Si el usuario no tiene el rol de "admin", enviar una respuesta de error
