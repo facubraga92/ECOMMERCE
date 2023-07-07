@@ -7,7 +7,7 @@ import { addToCart } from "../state/cart";
 //styles
 import "../styles/singleproduct.css";
 import { setCartVisible } from "../state/cart";
-import { message } from "antd";
+import { message, Carousel } from "antd";
 const defaultImage = "/defaultImg2.jpg";
 
 const SingleProduct = () => {
@@ -80,13 +80,29 @@ const SingleProduct = () => {
     <>
       {product ? (
         <div className="flex p-6 font-mono bg-white">
-          <div className="flex-none w-48 mb-10 relative z-10  ">
-            <img
+          <div className="flex-row w-48  mb-10 relative z-10  ">
+            {/* <img
               src={product.imgURL?.[0] ? product.imgURL[0] : defaultImage}
               alt=""
               className="absolute z-10 inset-0 w-full h-full object-cover rounded-lg"
               loading="lazy"
-            />
+            /> */}
+            <div className="overflow-hidden rounded-lg bg-black ">
+              {
+                <Carousel autoplay>
+                  {product.imgURL.map((img, index) => (
+                    <div key={index}>
+                      <img
+                        src={img ? img : defaultImage}
+                        alt=""
+                        className="w-[192px] h-[290px] object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </Carousel>
+              }
+            </div>
           </div>
           <form className="flex-auto pl-6 ">
             <div className="relative flex flex-wrap items-baseline pb-6 before:bg-black before:absolute before:-top-6 before:bottom-0 before:-left-60 before:-right-6">
