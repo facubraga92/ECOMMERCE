@@ -8,6 +8,7 @@ const {
   editProduct,
   searchProducts,
   createProduct,
+  deleteVariant,
 } = require("../controllers/products");
 const isAdmin = require("../middlewares/isAdmin");
 const productsRouter = express.Router();
@@ -27,5 +28,7 @@ productsRouter.delete("/:id", isAdmin, deleteProduct);
 productsRouter.put("/:id", isAdmin, editProduct);
 
 productsRouter.post("/", isAdmin, createProduct);
+
+productsRouter.delete("/variant/:id", isAdmin, deleteVariant);
 
 module.exports = productsRouter;

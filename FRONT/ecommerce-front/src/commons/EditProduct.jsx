@@ -36,7 +36,7 @@ const EditProduct = () => {
       setDescription(productData.description);
       setPrice(productData.price);
       setImgURLs(productData.imgURL || []);
-      setCategory(productData.category)
+      setCategory(productData.category);
 
       // Transformar las variantes para que coincidan con la estructura esperada
       const transformedVariants = productData.products_variants.map(
@@ -74,6 +74,32 @@ const EditProduct = () => {
     });
   };
 
+  // const handleRemoveVariant = (index) => {
+  //   setVariants((prevVariants) => {
+  //     const updatedVariants = [...prevVariants];
+  //     updatedVariants.splice(index, 1);
+
+  //     return updatedVariants;
+  //   });
+  // };
+  const handleRemoveVariant = async (variantId) => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/products/variant/${variantId}`,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+          credentials: "include",
+        }
+      );
+      alert("Variante Eliminada Correctamente.");
+      fetchProduct();
+      // Realizar alguna acción después de la edición exitosa
+    } catch (error) {
+      console.log("Error al eliminar la variante:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,6 +128,7 @@ const EditProduct = () => {
       console.log("Error al editar el producto:", error);
     }
   };
+
   return (
     <div className="max-w-md mx-auto">
       <h2 className="text-2xl font-semibold mb-4">Editar Producto</h2>
@@ -217,11 +244,18 @@ const EditProduct = () => {
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
+              <button
+                type="button"
+                className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded"
+                onClick={() => handleRemoveVariant(variant.id)}
+              >
+                Eliminar Variante
+              </button>
             </div>
           ))}
           <button
             type="button"
-            className="px-2 py-1 bg-red-600 hover:bg-red-700 mb-2 text-white rounded"
+            className="px-2 py-1 bg-red-600 hover:bg-red-700 mt-4 mb-2 text-white rounded"
             onClick={() =>
               setVariants((prevVariants) => [
                 ...prevVariants,

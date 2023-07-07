@@ -174,6 +174,23 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const deleteVariant = async (req, res) => {
+  const variantId = req.params.id;
+
+  try {
+    await Products_variants.destroy({ where: { id: variantId } });
+    res.status(200).send({
+      success: true,
+      message: "Variante eliminada correctamente.",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Hubo un error al eliminar la variante.",
+    });
+  }
+};
+
 const editProduct = async (req, res) => {
   const productId = req.params.id;
   const { name, description, price, imgURL,category, variants } = req.body;
@@ -256,4 +273,5 @@ module.exports = {
   editProduct,
   createProduct,
   searchProducts,
+  deleteVariant
 };
