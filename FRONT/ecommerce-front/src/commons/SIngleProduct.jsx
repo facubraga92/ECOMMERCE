@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { addToCart } from "../state/cart";
 
 //styles
-import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
 import { setCartVisible } from "../state/cart";
 const defaultImage = "/defaultImg2.jpg";
@@ -13,13 +12,12 @@ const defaultImage = "/defaultImg2.jpg";
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  // implementando
   const visible = useSelector((state) => state.cart.cartVisible);
   const user = useSelector((state) => state.user);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  //implementando
   const cartVisible = () => {
     dispatch(setCartVisible(!visible));
   };
@@ -75,6 +73,33 @@ const SingleProduct = () => {
 
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
+  };
+
+  const handleInmediateCheckout = async () => {
+    if (user.email) {
+      try {
+        if (selectedSize) {
+          const cartItem = {
+            email: user.email,
+            quantity: 1,
+            productsVariantId: selectedSize.id,
+          };
+
+          axios
+            .post("http://localhost:3000/api/cart/add-item", cartItem)
+            .then((response) => {
+              dispatch(addToCart(response.data));
+              navigate("/checkout");
+            });
+        } else {
+          alert("Please select a size.");
+        }
+      } catch (error) {
+        alert(JSON.stringify(error.response.data.message));
+      }
+    } else {
+      alert("Inicia sesión para añadir items al carrito.");
+    }
   };
 
   return (
@@ -137,17 +162,11 @@ const SingleProduct = () => {
             <div className="flex space-x-2 mb-4 text-sm font-medium">
               <div className="flex space-x-4">
                 <button
-                  className="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black"
-                  type="submit"
-                >
-                  Buy now
-                </button>
-                <button
                   className="px-6 h-12 uppercase font-semibold tracking-wider border border-slate-200 text-slate-900"
                   type="button"
                   onClick={handleAdd}
                 >
-                  Add to bag
+                  Añadir al Carrito
                 </button>
               </div>
               <button

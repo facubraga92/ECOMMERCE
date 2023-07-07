@@ -4,7 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import ProductsGrid from "./components/ProductsGrid";
 import { useSelector } from "react-redux";
-import SingleProduct from "./commons/SIngleProduct";
+import SingleProduct from "./commons/SingleProduct";
 import Navbar from "./commons/Navbar";
 import CartHistory from "./components/CartHistory";
 import Cart from "./commons/Cart";

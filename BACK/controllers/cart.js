@@ -358,7 +358,7 @@ const getCartHistory = async (req, res) => {
 
 const updateCartOrderStatusAndStock = async (req, res) => {
   try {
-    const { order_status } = req.body;
+    const { order_status, order_date, shipping_address } = req.body;
     const user = await Users.findOne({ where: { email: req.body.email } });
 
     // Buscar el carrito con order_status "pay_pending"
@@ -376,6 +376,9 @@ const updateCartOrderStatusAndStock = async (req, res) => {
 
     // Actualizar el order_status del carrito
     cart.order_status = order_status;
+    cart.shipping_address = shipping_address;
+    cart.order_date = order_date;
+
     await cart.save();
 
     // Obtener los cart_items asociados al carrito
