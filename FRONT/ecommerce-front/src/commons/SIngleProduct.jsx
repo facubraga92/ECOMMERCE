@@ -96,8 +96,10 @@ const SingleProduct = () => {
               <h1 className="relative w-full flex-none mb-2 text-2xl font-semibold text-white">
                 {product.name}
               </h1>
-              <div className="relative text-lg text-white mr-2">AR${product.price}</div>
-             
+              <div className="relative text-lg text-white mr-2">
+                AR${product.price}
+              </div>
+
               <div className="relative uppercase text-teal-400 ml-3">
                 {selectedSize && selectedSize.stock !== 0
                   ? "In Stock"
@@ -106,7 +108,6 @@ const SingleProduct = () => {
             </div>
             <div className="flex items-baseline my-6">
               <div className="space-x-3 flex text-sm font-medium">
-                
                 {product.products_variants.map((item) => (
                   <label key={item.size}>
                     <input
@@ -132,7 +133,7 @@ const SingleProduct = () => {
                     </div>
                   </label>
                 ))}
-                 <p className="text-black">{product.description}</p>
+                <p className="text-black">{product.description}</p>
               </div>
             </div>
             <div className="flex space-x-2 mb-4 text-sm font-medium">
@@ -155,12 +156,10 @@ const SingleProduct = () => {
                 className="favorite-button"
                 type="button"
                 aria-label="Like"
-              >
-                <span className="heart"></span>
-              </button>
+              ></button>
             </div>
             <p className="text-xs leading-6 text-slate-500 ">
-              Envio gratuito en todos los pedidos de Argentina
+              Envíos gratuitos si sos bootcamper de P5❤️.
             </p>
           </form>
         </div>

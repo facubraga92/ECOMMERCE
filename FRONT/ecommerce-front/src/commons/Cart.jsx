@@ -29,7 +29,9 @@ const Cart = () => {
         setCartItems(updatedCartItems);
         setCart(response.data.cart);
       } catch (error) {
-        console.error("Error al obtener los items del carrito", error);
+        if (cart.length == 0) {
+          console.log("Aún no ha agregado ningun item al carro.");
+        }
       }
     };
 
@@ -88,7 +90,7 @@ const Cart = () => {
       });
       setCart((prevCart) => ({ ...prevCart, amount: totalAmount }));
     } catch (error) {
-      alert('No hay suficientes unidades en stock para añadir al carrito')
+      alert("No hay suficientes unidades en stock para añadir al carrito");
     }
   };
 
