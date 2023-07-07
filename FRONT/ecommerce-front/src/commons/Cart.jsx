@@ -12,6 +12,7 @@ const Cart = () => {
   const visible = useSelector((state) => state.cart.cartVisible);
   const defaultImage = "/defaultImg2.jpg";
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -247,12 +248,18 @@ const Cart = () => {
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <a
-                          href="/checkout"
-                          className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
-                        >
-                          Checkout
-                        </a>
+                        {cartItems.length === 0 ? (
+                          <a className="flex items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-medium text-white shadow-sm ">
+                            Checkout
+                          </a>
+                        ) : (
+                          <a
+                            href="/checkout"
+                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                          >
+                            Checkout
+                          </a>
+                        )}
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>

@@ -28,6 +28,7 @@ export default function Navbar() {
         console.error("Error de servidor");
       });
   }, []);
+
   const handleLogout = () => {
     axios
       .post("http://localhost:3000/api/users/logout", null, {
