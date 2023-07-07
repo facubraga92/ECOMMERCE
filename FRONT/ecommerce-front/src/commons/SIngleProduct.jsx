@@ -60,8 +60,6 @@ const SingleProduct = () => {
             cartItem
           );
 
-          // console.log("Nuevo cart_item agregado:", response.data);
-
           dispatch(addToCart(response.data));
           cartVisible();
         } else {
