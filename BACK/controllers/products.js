@@ -10,18 +10,17 @@ const searchProducts = async (req, res) => {
 
   try {
     const products = await Products.findAll({
-      where: {
-        name: {
-          [Sequelize.Op.like]: `%${name}%`,
-        },
-      },
+      where: Sequelize.where(
+        Sequelize.fn("LOWER", Sequelize.col("name")),
+        "LIKE",
+        `%${name.toLowerCase()}%`
+      ),
       include: {
         model: Products_variants,
         attributes: ["id", "size", "color", "stock"],
       },
       attributes: ["id", "name", "description", "price", "imgURL"],
     });
-
     res.json(products);
   } catch (error) {
     console.error(error);

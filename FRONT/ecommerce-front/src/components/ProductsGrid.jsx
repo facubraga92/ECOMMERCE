@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../commons/ProductCard";
 import "../styles/ProductGrid.css";
 import { useSelector } from "react-redux";
+import Search from '../commons/Search'
 
 const ProductsGrid = () => {
   const user = useSelector((state) => state.user);
