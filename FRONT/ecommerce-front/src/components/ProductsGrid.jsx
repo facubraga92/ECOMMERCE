@@ -2,13 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ProductCard from "../commons/ProductCard";
 import "../styles/ProductGrid.css";
-import { useSelector } from "react-redux";
-import Search from '../commons/Search'
+import { useDispatch, useSelector } from "react-redux";
+import Search from "../commons/Search";
+import { setProductsRedux } from "../state/products";
 
 const ProductsGrid = () => {
   const user = useSelector((state) => state.user);
-
-  const [products, setProducts] = useState([]);
+  const products = useSelector((state) => state.products);
+  const dispatch = useDispatch();
   const [filteredCategory, setFilteredCategory] = useState(null);
 
   const fetchData = async () => {
@@ -22,7 +23,7 @@ const ProductsGrid = () => {
       const response = await axios.get(url);
       const sortedProducts = response.data.sort((a, b) => a.id - b.id);
 
-      setProducts(sortedProducts);
+      dispatch(setProductsRedux(sortedProducts));
     } catch (error) {
       console.log("Error al obtener los productos:", error);
     }
@@ -33,9 +34,8 @@ const ProductsGrid = () => {
   }, [filteredCategory]);
 
   useEffect(() => {
-    setProducts((prevProducts) =>
-      [...prevProducts].sort((a, b) => a.id - b.id)
-    );
+    const sortedProducts = [...products].sort((a, b) => a.id - b.id);
+    dispatch(setProductsRedux(sortedProducts));
   }, []);
 
   const handleFilter = (category) => {
@@ -66,6 +66,8 @@ const ProductsGrid = () => {
       <div>
         <h1 className="text-6xl mb-6 fontClass">Productos</h1>
         <div className="flex gap-2 mb-4 space-x-0.5 items-center justify-center ">
+          <Search />
+
           <button
             className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
             onClick={() => handleFilter(null)}
@@ -91,6 +93,7 @@ const ProductsGrid = () => {
             Accesorios
           </button>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {user.role === "admin" && (
             <div className="bg-transparent p-6 rounded shadow-md mt-4">
