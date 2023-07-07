@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const AddProduct = () => {
   const [name, setName] = useState("");
@@ -52,7 +53,7 @@ const AddProduct = () => {
         }
       );
 
-      alert("Producto creado correctamente.");
+      message.success("Producto creado correctamente.");
       navigate(`/admin/editproduct/${response.data.id}`);
 
       // Realizar alguna acción después de la creación exitosa

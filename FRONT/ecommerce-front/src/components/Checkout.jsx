@@ -3,6 +3,7 @@ import "../styles/checkout.css";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { message } from "antd";
 export default function Checkout() {
   const user = useSelector((state) => state.user);
   const [cart, setCart] = useState([]);
@@ -63,7 +64,7 @@ export default function Checkout() {
         credentials: "include",
       })
       .then((response) => {
-        alert("Compra Realizada, Muchas Gracias!");
+        message.success("Compra Realizada, Muchas Gracias!");
         navigate('/')
 
       })

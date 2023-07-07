@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 // Estilos
 import "../styles/register.css";
+import { message } from "antd";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ const Register = () => {
   const [code, setCode] = useState("");
   const [showCodeInput, setShowCodeInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const alerta = message.success;
 
   const navigate = useNavigate();
 
@@ -34,14 +36,14 @@ const Register = () => {
         .then((res) => {
           const { success, message } = res.data;
           if (success) {
-            alert(message);
+            alerta(message);
             navigate("/login");
           } else {
             setErrorMessage(message);
           }
         })
         .catch((error) => {
-          console.log("Error registering", error);
+          message.error(error.response.data);
         });
     } else {
       setErrorMessage("Las contraseñas no coinciden");
@@ -139,7 +141,10 @@ const Register = () => {
           <div className="mt-2">
             <label className="mt-4">
               ¿Tienes un código?{" "}
-              <a className="text-white cursor-default" onClick={handleCodeLinkClick}>
+              <a
+                className="text-white cursor-default"
+                onClick={handleCodeLinkClick}
+              >
                 Ingresar código.
               </a>
             </label>

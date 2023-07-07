@@ -5,6 +5,8 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setCartVisible } from "../state/cart";
+import { message } from "antd";
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState([]);
@@ -91,7 +93,7 @@ const Cart = () => {
       });
       setCart((prevCart) => ({ ...prevCart, amount: totalAmount }));
     } catch (error) {
-      alert("No hay suficientes unidades en stock para añadir al carrito");
+      message.error("No hay suficientes unidades en stock para añadir al carrito");
     }
   };
 
