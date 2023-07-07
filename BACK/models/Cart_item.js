@@ -84,19 +84,6 @@ Cart_item.afterCreate(async (cartItem, options) => {
     // Sumar el monto al valor actual del campo 'amount' en el carrito
     const updatedAmount = parseFloat(cart.amount) + itemAmount;
 
-    // console.log(
-    //   `itemAmount : ${typeof itemAmount} --- updatedAmount : ${typeof updatedAmount} -- cart.amount parsefloteado : ${typeof parseFloat(
-    //     cart.amount
-    //   )}`
-    // );
-    // console.log(
-    //   `itemAmount : ${itemAmount} --- updatedAmount : ${updatedAmount} -- cart.amount parsefloteado : ${parseFloat(
-    //     cart.amount
-    //   )}`
-    // );
-
-    console.log(updatedAmount);
-
     // Actualizar el campo 'amount' en el carrito correspondiente
     await Cart.update({ amount: updatedAmount }, { where: { id: cartId } });
   } catch (error) {
@@ -114,7 +101,6 @@ Cart_item.afterDestroy(async (cartItem, options) => {
 
     // Actualizar el campo 'amount' en el carrito correspondiente
     await Cart.update({ amount: updatedAmount }, { where: { id: cartId } });
-    console.log(updatedAmount);
   } catch (error) {
     console.error(error);
   }
@@ -130,7 +116,6 @@ Cart_item.afterUpdate(async (cartItem, options) => {
 
     // Actualizar el campo 'amount' en el carrito correspondiente
     await Cart.update({ amount: updatedAmount }, { where: { id: cartId } });
-    console.log(updatedAmount);
   } catch (error) {
     console.error(error);
   }
