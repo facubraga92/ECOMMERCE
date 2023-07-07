@@ -18,13 +18,18 @@ Products.init(
       type: Sequelize.TEXT,
       allowNull: false,
     },
+    category: {
+      type: Sequelize.ENUM("remeras", "hoodies", "accesorios"),
+      allowNull: false,
+      defaultValue: "remeras",
+    },
     price: {
       type: Sequelize.DECIMAL(10, 2),
       allowNull: false,
     },
     imgURL: {
       type: Sequelize.ARRAY(Sequelize.STRING),
-      defaultValue: []
+      defaultValue: [],
     },
   },
   { sequelize: db, modelName: "products", timestamps: false }

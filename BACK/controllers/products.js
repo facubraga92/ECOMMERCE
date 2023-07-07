@@ -119,22 +119,13 @@ const getSearchProduct = (req, res) => {
  * @throws {Error} - Error al obtener los productos de la categoría.
  */
 
-const getCategorie = async (req, res) => {
+const getCategory = async (req, res) => {
   const category = req.params.category.toLowerCase();
 
   try {
-    const categoryInstance = await Categories.findOne({
-      where: { name: category },
-    });
-
-    if (!categoryInstance) {
-      return res.status(404).json({ error: "Categoría no encontrada" });
-    }
-
     const products = await Products.findAll({
-      where: { categoryId: categoryInstance.id },
+      where: { category: category },
       include: [
-        { model: Categories, attributes: ["name"] },
         {
           model: Products_variants,
           attributes: ["id", "size", "color", "stock"],
@@ -142,10 +133,14 @@ const getCategorie = async (req, res) => {
       ],
     });
 
-    res.json(products);
+    if (products.length === 0) {
+      return res.status(404).json({ error: "Categoría no encontrada" });
+    }
+
+    res.status(200).json(products);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    console.log("Error al obtener la categoría:", error);
+    res.status(500).json({ error: "Hubo un error al obtener la categoría" });
   }
 };
 
@@ -230,7 +225,7 @@ module.exports = {
   getAllProducts,
   getSingleProduct,
   getSearchProduct,
-  getCategorie,
+  getCategory,
   deleteProduct,
   editProduct,
   searchProducts,

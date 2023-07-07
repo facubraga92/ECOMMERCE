@@ -323,7 +323,7 @@ const getCartHistory = async (req, res) => {
             include: [
               {
                 model: Products,
-                attributes: ["id", "name", "description", "categoryId"],
+                attributes: ["id", "name", "description", "category"],
               },
             ],
           },

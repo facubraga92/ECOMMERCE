@@ -11,8 +11,9 @@ Categories.init(
       primaryKey: true,
     },
     name: {
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM("remeras", "hoodies", "accesorios"),
       allowNull: false,
+      defaultValue: "remeras",
     },
   },
   { sequelize: db, modelName: "categories", timestamps: false }

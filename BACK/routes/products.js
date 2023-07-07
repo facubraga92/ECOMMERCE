@@ -3,7 +3,7 @@ const {
   getAllProducts,
   getSingleProduct,
   getSearchProduct,
-  getCategorie,
+  getCategory,
   deleteProduct,
   editProduct,
   searchProducts,
@@ -19,7 +19,7 @@ productsRouter.get("/:name", getSearchProduct);
 
 productsRouter.get("/search/:name", searchProducts);
 
-productsRouter.get("/categories/:category", getCategorie);
+productsRouter.get("/categories/:category", getCategory);
 
 productsRouter.delete("/:id", isAdmin, deleteProduct);
 
