@@ -163,7 +163,6 @@ const changeUserRole = async (req, res) => {
     user.role == "admin" ? (user.role = "customer") : (user.role = "admin");
 
     user.save();
-    console.log(user.role);
     res.send(
       `Role del usuario con id:${id} cambiado exitosamente a ${user.role}`
     );

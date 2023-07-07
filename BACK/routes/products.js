@@ -3,8 +3,14 @@ const {
   getAllProducts,
   getSingleProduct,
   getSearchProduct,
-  getCategorie,
+  getCategory,
+  deleteProduct,
+  editProduct,
+  searchProducts,
+  createProduct,
+  deleteVariant,
 } = require("../controllers/products");
+const isAdmin = require("../middlewares/isAdmin");
 const productsRouter = express.Router();
 
 productsRouter.get("/", getAllProducts);
@@ -13,6 +19,16 @@ productsRouter.get("/:id", getSingleProduct);
 
 productsRouter.get("/:name", getSearchProduct);
 
-productsRouter.get('/categories/:category',getCategorie);
+productsRouter.get("/search/:name", searchProducts);
+
+productsRouter.get("/categories/:category", getCategory);
+
+productsRouter.delete("/:id", isAdmin, deleteProduct);
+
+productsRouter.put("/:id", isAdmin, editProduct);
+
+productsRouter.post("/", isAdmin, createProduct);
+
+productsRouter.delete("/variant/:id", isAdmin, deleteVariant);
 
 module.exports = productsRouter;

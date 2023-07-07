@@ -14,10 +14,6 @@ Cart.belongsTo(Users);
 Products.hasMany(Products_variants);
 Products_variants.belongsTo(Products);
 
-// Relación entre Products y Categories
-Categories.hasMany(Products);
-Products.belongsTo(Categories);
-
 // Relación entre Cart y Cart_item
 Cart.hasMany(Cart_item);
 Cart_item.belongsTo(Cart);

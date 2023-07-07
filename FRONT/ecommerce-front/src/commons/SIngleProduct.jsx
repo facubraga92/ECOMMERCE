@@ -8,6 +8,7 @@ import { addToCart } from "../state/cart";
 import TTLogo from "../assets/TT_logo.png";
 import "../styles/singleproduct.css";
 import { setCartVisible } from "../state/cart";
+const defaultImage = "/defaultImg2.jpg";
 
 const SingleProduct = () => {
   const [product, setProduct] = useState(null);
@@ -59,7 +60,7 @@ const SingleProduct = () => {
             cartItem
           );
 
-          console.log("Nuevo cart_item agregado:", response.data);
+          // console.log("Nuevo cart_item agregado:", response.data);
 
           dispatch(addToCart(response.data));
           cartVisible();
@@ -82,9 +83,9 @@ const SingleProduct = () => {
     <>
       {product ? (
         <div className="flex p-6 font-mono bg-white">
-          <div className="flex-none w-48 mb-10 relative z-10  before:absolute before:top-1 before:left-1 before:w-full before:h-full before:bg-teal-400">
+          <div className="flex-none w-48 mb-10 relative z-10  ">
             <img
-              src={TTLogo}
+              src={product.imgURL?.[0] ? product.imgURL[0] : defaultImage}
               alt=""
               className="absolute z-10 inset-0 w-full h-full object-cover rounded-lg"
               loading="lazy"
@@ -95,7 +96,10 @@ const SingleProduct = () => {
               <h1 className="relative w-full flex-none mb-2 text-2xl font-semibold text-white">
                 {product.name}
               </h1>
-              <div className="relative text-lg text-white">{product.price}</div>
+              <div className="relative text-lg text-white mr-2">
+                AR${product.price}
+              </div>
+
               <div className="relative uppercase text-teal-400 ml-3">
                 {selectedSize && selectedSize.stock !== 0
                   ? "In Stock"
@@ -129,6 +133,7 @@ const SingleProduct = () => {
                     </div>
                   </label>
                 ))}
+                <p className="text-black">{product.description}</p>
               </div>
             </div>
             <div className="flex space-x-2 mb-4 text-sm font-medium">
@@ -151,12 +156,10 @@ const SingleProduct = () => {
                 className="favorite-button"
                 type="button"
                 aria-label="Like"
-              >
-                <span className="heart"></span>
-              </button>
+              ></button>
             </div>
             <p className="text-xs leading-6 text-slate-500 ">
-              Envio gratuito en todos los pedidos de Argentina
+              Envíos gratuitos si sos bootcamper de P5❤️.
             </p>
           </form>
         </div>

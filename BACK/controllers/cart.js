@@ -323,7 +323,7 @@ const getCartHistory = async (req, res) => {
             include: [
               {
                 model: Products,
-                attributes: ["id", "name", "description", "categoryId"],
+                attributes: ["id", "name", "description", "category"],
               },
             ],
           },
@@ -360,22 +360,7 @@ const updateCartOrderStatusAndStock = async (req, res) => {
   try {
     const { order_status } = req.body;
     const user = await Users.findOne({ where: { email: req.body.email } });
-    let mailOptions = {
-      from: "logistica@trashtalk.com",
-      to: user.email,
-      subject: "Confirmación de compra",
-      text: `Su compra en Trash Talk ha sido confirmada! Pronto recibira su paquete ${user.name}!`,
-      html: `<div style="max-width: 600px; margin: 0 auto; padding: 2rem; background-color: #f7fafc;">
-      <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">Su compra en Trash Talk ha sido confirmada! Pronto recibira su paquete!</h1>
-      <ul style="list-style-type: none; padding: 0; margin-bottom: 1rem;">
-          <li>Usuario: ${user.name}</li>
-          <li>User Email: ${user.email}</li>
-          <li >Productos adquiridos: ${user.email}</li>
-      </ul>
-    
-  </div>`,
-    };
-    console.log(user);
+
     // Buscar el carrito con order_status "pay_pending"
     const cart = await Cart.findOne({
       where: {
@@ -394,7 +379,20 @@ const updateCartOrderStatusAndStock = async (req, res) => {
     await cart.save();
 
     // Obtener los cart_items asociados al carrito
-    const cartItems = await Cart_item.findAll({ where: { cartId: cart.id } });
+    const cartItems = await Cart_item.findAll({
+      where: { cartId: cart.id },
+      include: [
+        {
+          model: Products_variants,
+          include: [
+            {
+              model: Products,
+              attributes: ["id", "name", "description", "price", "imgURL"],
+            },
+          ],
+        },
+      ],
+    });
 
     // Actualizar el stock de los products_variants correspondientes
     for (const cartItem of cartItems) {
@@ -414,6 +412,35 @@ const updateCartOrderStatusAndStock = async (req, res) => {
       // Guardar los cambios en el stock del product_variant
       await productVariant.save();
     }
+
+    let productList = "";
+    for (const cartItem of cartItems) {
+      productList += `<tr>
+                    <td style="padding: 0.5rem; border: 1px solid #ccc;">${cartItem.products_variant.product.name}</td>
+                    <td style="padding: 0.5rem; border: 1px solid #ccc;">${cartItem.products_variant.product.description}</td>
+                  </tr>`;
+    }
+
+    let mailOptions = {
+      from: "logistica@trashtalk.com",
+      to: user.email,
+      subject: "Confirmación de compra",
+      text: `Su compra en Trash Talk ha sido confirmada! Pronto recibirá su paquete ${user.name}!`,
+      html: `<div style="max-width: 600px; margin: 0 auto; padding: 2rem; background-color: #f7fafc;">
+    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">Su compra en Trash Talk ha sido confirmada! Pronto recibirá su paquete ${user.name}!</h1>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="padding: 0.5rem; border: 1px solid #ccc;">Nombre del producto</th>
+          <th style="padding: 0.5rem; border: 1px solid #ccc;">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${productList}
+      </tbody>
+    </table>
+  </div>`,
+    };
 
     sendMail(mailOptions);
 
