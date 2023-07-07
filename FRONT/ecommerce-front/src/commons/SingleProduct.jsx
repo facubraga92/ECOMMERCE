@@ -7,6 +7,7 @@ import { addToCart } from "../state/cart";
 //styles
 import "../styles/singleproduct.css";
 import { setCartVisible } from "../state/cart";
+import { message } from "antd";
 const defaultImage = "/defaultImg2.jpg";
 
 const SingleProduct = () => {
@@ -61,45 +62,18 @@ const SingleProduct = () => {
           dispatch(addToCart(response.data));
           cartVisible();
         } else {
-          alert("Please select a size.");
+          message.warning("Por favor selecciona un talle.");
         }
       } catch (error) {
-        alert(JSON.stringify(error.response.data.message));
+        message.error(JSON.stringify(error.response.data.message));
       }
     } else {
-      alert("Inicia sesión para añadir items al carrito.");
+      message.error("Inicia sesión para añadir items al carrito.");
     }
   };
 
   const handleSizeSelection = (size) => {
     setSelectedSize(size);
-  };
-
-  const handleInmediateCheckout = async () => {
-    if (user.email) {
-      try {
-        if (selectedSize) {
-          const cartItem = {
-            email: user.email,
-            quantity: 1,
-            productsVariantId: selectedSize.id,
-          };
-
-          axios
-            .post("http://localhost:3000/api/cart/add-item", cartItem)
-            .then((response) => {
-              dispatch(addToCart(response.data));
-              navigate("/checkout");
-            });
-        } else {
-          alert("Please select a size.");
-        }
-      } catch (error) {
-        alert(JSON.stringify(error.response.data.message));
-      }
-    } else {
-      alert("Inicia sesión para añadir items al carrito.");
-    }
   };
 
   return (

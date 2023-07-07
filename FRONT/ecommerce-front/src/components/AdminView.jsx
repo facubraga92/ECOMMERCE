@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { message } from "antd";
 
 const AdminView = () => {
   const user = useSelector((state) => state.user);
@@ -33,7 +34,7 @@ const AdminView = () => {
           refreshUsers();
         });
     } else {
-      alert("No puedes quitarte los privilegios de administrador a ti mismo.");
+      message.error("No puedes quitarte los privilegios de administrador a ti mismo.");
     }
   };
 
@@ -55,7 +56,7 @@ const AdminView = () => {
           });
       }
     } else {
-      alert("No puedes eliminarte a ti mismo.");
+      message.error("No puedes eliminarte a ti mismo.");
     }
   };
 

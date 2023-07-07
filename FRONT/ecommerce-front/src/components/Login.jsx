@@ -7,6 +7,7 @@ import { setUser } from "../state/user";
 
 //Estilos
 import "../styles/login.css";
+import { message } from "antd";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -47,7 +48,7 @@ const Login = () => {
           .then((tokenVerifyResponse) => {
             dispatch(setUser(tokenVerifyResponse.data));
 
-            alert(
+            message.success(
               `Inicio de sesión exitoso: Bienvenido de regreso ${loginResponse.data.name} `
             );
 
@@ -57,17 +58,17 @@ const Login = () => {
           .catch((error) => {
             if (error.response && error.response.status === 403) {
               // El token no es válido
-              alert("El token no es válido. Inicia sesión nuevamente.");
+              message.error("El token no es válido. Inicia sesión nuevamente.");
             } else {
-              alert(`Error en la verificación del token: ${error.message}`);
+              message.error(`Error en la verificación del token: ${error.message}`);
             }
           });
       })
       .catch((error) => {
         if (error.response && error.response.data) {
-          alert(error.response.data);
+          message.error(error.response.data);
         } else {
-          alert("Ocurrió un error al procesar la solicitud.");
+          message.error("Ocurrió un error al procesar la solicitud.");
         }
       });
   };

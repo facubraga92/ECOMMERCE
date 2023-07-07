@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { message } from "antd";
 
 const EditProduct = () => {
   const productId =
@@ -92,7 +93,7 @@ const EditProduct = () => {
           credentials: "include",
         }
       );
-      alert("Variante Eliminada Correctamente.");
+      message.warning("Variante Eliminada Correctamente.");
       fetchProduct();
       // Realizar alguna acción después de la edición exitosa
     } catch (error) {
@@ -122,7 +123,7 @@ const EditProduct = () => {
           credentials: "include",
         }
       );
-      alert("Producto actualizado correctamente.");
+      message.success("Producto actualizado correctamente.");
       // Realizar alguna acción después de la edición exitosa
     } catch (error) {
       console.log("Error al editar el producto:", error);
