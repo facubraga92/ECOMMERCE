@@ -65,7 +65,7 @@ const ProductsGrid = () => {
   return (
     <>
       <div>
-        <h1 className="text-6xl mb-6 fontClass">Productos</h1>
+        <h1 className="text-7xl pt-16 mb-6 fontClass">Nuestros productos</h1>
         <div className="flex gap-2 mb-4 space-x-0.5 items-center justify-center ">
           <Search />
 
