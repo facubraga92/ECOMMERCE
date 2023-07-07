@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../commons/ProductCard";
 import "../styles/ProductGrid.css";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const ProductsGrid = () => {
   const user = useSelector((state) => state.user);
@@ -93,12 +94,14 @@ const ProductsGrid = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {user.role === "admin" && (
             <div className="bg-transparent p-6 rounded shadow-md mt-4">
-              <button
-                onClick={handleAddProductClick}
-                className="w-[90%] h-[90%] text-center bg-opacity-70  text-white bg-red-600 hover:bg-red-700 rounded-3xl py-2 px-4"
-              >
-                Agregar nuevo producto
-              </button>
+              <Link to={`/admin/addproduct`}>
+                <button
+                  onClick={handleAddProductClick}
+                  className="w-[90%] h-[90%] text-center bg-opacity-70  text-white bg-red-600 hover:bg-red-700 rounded-3xl py-2 px-4"
+                >
+                  Agregar nuevo producto
+                </button>
+              </Link>
             </div>
           )}
           {products.map((product) => (

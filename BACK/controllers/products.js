@@ -221,6 +221,43 @@ const editProduct = async (req, res) => {
   }
 };
 
+const createProduct = async (req, res) => {
+  const { name, description, category, price, imgURLs } = req.body;
+
+  try {
+    // Crear el producto principal
+    const product = await Products.create({
+      name,
+      description,
+      category,
+      price,
+      imgURL: imgURLs,
+    });
+
+    // Crear las variantes
+    // for (const variant of variants) {
+    //   const { size, color, stock } = variant;
+    //   await Products_variants.create({
+    //     size,
+    //     color,
+    //     stock,
+    //     productId: product.id,
+    //   });
+    // }
+
+    res.status(200).send({
+      success: true,
+      message: "Producto creado correctamente.",
+      id: product.id,
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Hubo un error al crear el producto.",
+    });
+  }
+};
+
 module.exports = {
   getAllProducts,
   getSingleProduct,
@@ -228,5 +265,6 @@ module.exports = {
   getCategory,
   deleteProduct,
   editProduct,
+  createProduct,
   searchProducts,
 };
