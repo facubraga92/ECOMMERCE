@@ -1,3 +1,4 @@
+const Cart_item = require("../models/Cart_item");
 const Categories = require("../models/Categories");
 const Products = require("../models/Products");
 const Products_variants = require("../models/Products_variants");
@@ -145,27 +146,26 @@ const getCategorie = async (req, res) => {
 
 const deleteProduct = async (req, res) => {
   try {
-    const id = req.params.id;
+    const productId = req.params.id;
 
-    const product = await Products.findByPk(id, {
-      include: {
-        model: Products_variants,
-        attributes: ["id", "size", "color", "stock"],
-      },
+    // Buscar y eliminar los cart_items asociados a las variantes de productos del producto
+    const productVariants = await Products_variants.findAll({
+      where: { productId },
     });
+    const variantIds = productVariants.map((variant) => variant.id);
 
-    if (!product) {
-      const error = new Error("Product was not found!");
-      error.status = 404;
-      throw error;
-    }
+    await Cart_item.destroy({ where: { productsVariantId: variantIds } });
 
-    await product.destroy();
+    // Eliminar las variantes de productos asociadas al producto
+    await Products_variants.destroy({ where: { productId } });
+
+    // Eliminar el producto
+    await Products.destroy({ where: { id: productId } });
 
     res.status(200).send({
       success: true,
       message: "Producto eliminado correctamente.",
-      productName: product.name,
+      productId,
     });
   } catch (error) {
     res.status(error.status || 500).send({
