@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const AdminView = () => {
   const user = useSelector((state) => state.user);
@@ -36,7 +38,7 @@ const AdminView = () => {
   };
 
   const handleDeleteUser = (id) => {
-    if (user.id != id) {
+    if (user.id !== id) {
       const confirmed = window.confirm(
         "¿Estás seguro de eliminar este usuario?"
       );
@@ -102,11 +104,21 @@ const AdminView = () => {
         <tbody className="bg-white text-black divide-y divide-gray-200">
           {users.map((user) => (
             <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.id}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.email}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.address}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.phone}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
+                {user.id}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
+                <Link title={`Click para ver los carritos de ${user.name}`} to={`/admin/user-carts/${user.id}`}>{user.name}</Link>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
+                {user.email}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
+                {user.address}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-center">
+                {user.phone}
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
                 <input
                   type="checkbox"
@@ -129,7 +141,6 @@ const AdminView = () => {
       </table>
     </div>
   );
-  
 };
 
 export default AdminView;

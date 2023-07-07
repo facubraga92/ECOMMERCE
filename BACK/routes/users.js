@@ -7,6 +7,7 @@ const {
   changeUserRole,
   getAllUsers,
   deleteUser,
+  getOneUser,
 } = require("../controllers/users");
 const validateUser = require("../middlewares/auth");
 const isAdmin = require("../middlewares/isAdmin");
@@ -33,5 +34,8 @@ usersRouter.get("/admin/", isAdmin, getAllUsers);
 
 //ruta para eliminar a un usuario:
 usersRouter.delete("/admin/:id", isAdmin, deleteUser);
+
+//obtener datos de un usuario:
+usersRouter.get('/admin/info/:id',isAdmin,getOneUser)
 
 module.exports = usersRouter;

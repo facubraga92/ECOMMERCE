@@ -12,6 +12,7 @@ import Checkout from "./components/Checkout";
 import AdminView from "./components/AdminView";
 import EditProduct from "./commons/EditProduct";
 import AddProduct from "./components/AddProduct";
+import UserCarts from "./commons/UserCarts";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -44,6 +45,10 @@ function App() {
         <Route
           path={"/admin/addproduct"}
           element={user.role == "admin" ? <AddProduct /> : <ProductsGrid />}
+        />
+        <Route
+          path={"/admin/user-carts/:id"}
+          element={user.role == "admin" ? <UserCarts /> : <ProductsGrid />}
         />
       </Routes>
     </div>

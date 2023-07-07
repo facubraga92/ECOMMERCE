@@ -25,7 +25,7 @@ export default function Navbar() {
         dispatch(setUser(user.data));
       })
       .catch((error) => {
-        console.error("Error de servidor");
+        // console.error("Error de servidor");
       });
   }, []);
 

@@ -341,7 +341,6 @@ const getCartHistory = async (req, res) => {
 
     res.json({ carts: cartItems });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Error al obtener los ítems del carrito" });
   }
 };
@@ -458,6 +457,38 @@ const updateCartOrderStatusAndStock = async (req, res) => {
   }
 };
 
+const adminOrderStatusChange = async (req, res) => {
+  try {
+    const { order_status, cartId } = req.body;
+
+    const cart = await Cart.findOne({
+      where: {
+        id: cartId,
+      },
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        message: "Carrito no encontrado.",
+      });
+    }
+
+    // Actualizar el order_status del carrito
+    cart.order_status = order_status;
+
+    await cart.save();
+
+    res.json({
+      message: `Se ha actualizado el order_status del carrito y el stock de los articulos correctamente.`,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error al actualizar el order_status del carrito",
+    });
+  }
+};
+
 module.exports = {
   addItem,
   removeItem,
@@ -465,4 +496,5 @@ module.exports = {
   getCartItems,
   getCartHistory,
   updateCartOrderStatusAndStock,
+  adminOrderStatusChange,
 };

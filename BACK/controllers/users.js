@@ -197,6 +197,23 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getOneUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await Users.findByPk(id, {
+      attributes: ["id", "name", "email"],
+    });
+
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send("Usuario no encontrado.");
+    }
+  } catch (error) {
+    res.status(500).send("Error del servidor al obtener el usuario.");
+  }
+};
+
 /**
  * Elimina un usuario.
  *
@@ -231,4 +248,5 @@ module.exports = {
   changeUserRole,
   getAllUsers,
   deleteUser,
+  getOneUser
 };
