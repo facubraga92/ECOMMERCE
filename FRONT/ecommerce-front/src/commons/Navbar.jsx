@@ -47,7 +47,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-brand text-6xl fontClass">
-          {user.name ? `Hola!, ${user.name}` : `.trash talk.`}
+          {user.name ? `Hola! ${user.name}` : `.trash talk.`}
         </Link>
         <ul className="navbar-links">
           {user.email ? (
