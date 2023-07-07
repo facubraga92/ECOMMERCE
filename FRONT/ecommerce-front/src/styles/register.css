@@ -7,7 +7,7 @@
 }
 
 :root {
-  --green: #ff2600;
+  --green: #ffffff;
 }
 
 body {
@@ -15,7 +15,7 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-.container {
+.container-register {
   height: 100vh;
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@ body {
   padding: 2rem;
 }
 
-.container form {
+.container-register form {
   flex: 0 1;
   min-height: 500px;
   min-width: 500px;
@@ -35,22 +35,22 @@ body {
   background-color: #000000;
   padding: 1rem;
   border-radius: 0.5rem;
-  box-shadow: 1px 2px 13px -1px #ff2600;
+  box-shadow: 1px 2px 13px -1px #ffffff;
 }
 
-.container form h1 {
+.container-register form h1 {
   font-size: 3rem;
   color: white;
   font-weight: 400;
   margin-bottom: 1rem;
 }
 
-.container form .t-input {
+.container-register form .t-input {
   position: relative;
   width: 100%;
 }
 
-.container form .t-input input {
+.container-register form .t-input input {
   width: 100%;
   min-height: 40px;
   color: white;
@@ -64,11 +64,11 @@ body {
   caret-color: var(--green);
 }
 
-.container form .t-input input::placeholder {
+.container-register form .t-input input::placeholder {
   opacity: 0;
 }
 
-.container form .t-input .b-line {
+.container-register form .t-input .b-line {
   content: "";
   position: absolute;
   height: 2px;
@@ -79,22 +79,22 @@ body {
   transition-duration: 300ms;
 }
 
-.container form .t-input input:not(:placeholder-shown) ~ .b-line,
-.container form .t-input:hover .b-line,
-.container form .t-input:focus-within .b-line {
+.container-register form .t-input input:not(:placeholder-shown) ~ .b-line,
+.container-register form .t-input:hover .b-line,
+.container-register form .t-input:focus-within .b-line {
   background: linear-gradient(90deg, var(--green) 0%, transparent 100%);
   width: 100%;
 }
 
-.container form .t-input label {
+.container-register form .t-input label {
   outline: none;
 }
 
-.container form .t-input:hover label {
+.container-register form .t-input:hover label {
   color: var(--green);
 }
 
-.container form .t-input input + label {
+.container-register form .t-input input + label {
   position: absolute;
   left: 0;
   top: 50%;
@@ -103,14 +103,14 @@ body {
   transition-duration: 150ms;
 }
 
-.container form .t-input input:not(:placeholder-shown) + label,
-.container form .t-input input:focus + label {
+.container-register form .t-input input:not(:placeholder-shown) + label,
+.container-register form .t-input input:focus + label {
   font-size: 0.75rem;
   transform: translateY(-180%);
   color: var(--green);
 }
 
-.container form button {
+.container-register form button {
   align-self: flex-end;
   width: 100px;
   height: 40px;
@@ -127,12 +127,12 @@ body {
   animation: neon 2s infinite linear;
 }
 
-.container form button:focus,
-.container form button:hover {
+.container-register form button:focus,
+.container-register form button:hover {
   background: var(--green);
   border: none;
   outline: 1px solid var(--green);
-  color: white;
+  color: rgb(0, 0, 0);
   animation: none;
-  box-shadow: 0 0 20px 10px #ff2600;
+  box-shadow: 0 0 20px 10px #ffffff;
 }

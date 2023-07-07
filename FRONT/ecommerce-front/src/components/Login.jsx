@@ -60,7 +60,9 @@ const Login = () => {
               // El token no es válido
               message.error("El token no es válido. Inicia sesión nuevamente.");
             } else {
-              message.error(`Error en la verificación del token: ${error.message}`);
+              message.error(
+                `Error en la verificación del token: ${error.message}`
+              );
             }
           });
       })
@@ -75,7 +77,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="container">
+      <div className="container-login">
         <form onSubmit={handleSubmit}>
           <h1>Inicia sesión</h1>
           <div className="email t-input">

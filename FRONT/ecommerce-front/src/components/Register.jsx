@@ -57,7 +57,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container-register">
       <form onSubmit={handleSubmit}>
         <h1>Creá tu cuenta</h1>
         <div className="email t-input">

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../styles/checkout.css";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { message } from "antd";
+
 export default function Checkout() {
   const user = useSelector((state) => state.user);
   const [cart, setCart] = useState([]);
@@ -17,7 +16,8 @@ export default function Checkout() {
   const [postalCode, setPostalCode] = useState("");
   const [province, setProvince] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -64,9 +64,8 @@ export default function Checkout() {
         credentials: "include",
       })
       .then((response) => {
-        message.success("Compra Realizada, Muchas Gracias!");
-        navigate('/')
-
+        alert("Compra Realizada, Muchas Gracias!");
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
@@ -87,9 +86,10 @@ export default function Checkout() {
 
   const handleExpiryDateChange = (event) => {
     const input = event.target.value;
+    const formattedInput = input.replace(/[^0-9/]/g, ""); // Eliminar caracteres no numéricos ni la barra (/)
 
-    if (/^\d{0,2}\/\d{0,2}$/.test(input)) {
-      setExpiryDate(input);
+    if (/^\d{0,2}(\/\d{0,2})?$/.test(formattedInput)) {
+      setExpiryDate(formattedInput);
     }
   };
   const handleCVCChange = (event) => {
@@ -149,45 +149,9 @@ export default function Checkout() {
     <>
       <div>
         <h1 className="mt-8">Checkout</h1>
-        <div className="py-16 px-4 md:px-6 2xl:px-0 flex justify-end items-center 2xl:mx-auto 2xl:container">
+        <div className="py-16 px-4 md:px-6 2xl:px-0 flex justify-end items-center 2xl:mx-auto 2xl:container w-full">
           <div className="flex flex-col justify-start items-start w-full space-y-9">
-            <div class="flex justify-start flex-col items-start space-y-2 mr 20">
-              <Link to={"/"}>
-                <button class="flex flex-row items-center text-gray-600 dark:text-white hover:text-gray-500 space-x-1">
-                  <svg
-                    class="fill-stroke"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.91681 7H11.0835"
-                      stroke="currentColor"
-                      stroke-width="0.666667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.91681 7L5.25014 9.33333"
-                      stroke="currentColor"
-                      stroke-width="0.666667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.91681 7.00002L5.25014 4.66669"
-                      stroke="currentColor"
-                      stroke-width="0.666667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                  <p class="text-sm leading-none">Back</p>
-                </button>
-              </Link>
-
+            <div class="flex justify-start flex-col items-start space-y-2 mr 20 ">
               <p class="text-base leading-normal sm:leading-4 text-gray-600 dark:text-white"></p>
             </div>
             <div class="flex flex-col xl:flex-row justify-center xl:justify-between space-y-6 xl:space-y-0 xl:space-x-6 w-full">
@@ -268,7 +232,7 @@ export default function Checkout() {
                     Direccion de envio
                   </p>
                   <hr className="border w-full" />
-                </div>{" "}
+                </div>
                 <div className="mt-2 flex-col">
                   <div>
                     <input
