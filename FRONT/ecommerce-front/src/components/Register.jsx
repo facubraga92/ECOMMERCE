@@ -103,7 +103,7 @@ const Register = () => {
             onChange={(e) => setName(e.target.value)}
             required
           />
-          <label htmlFor="name">Nombre</label>
+          <label htmlFor="name">Nombre Completo</label>
           <div className="b-line"></div>
         </div>
         <div className="address t-input">
