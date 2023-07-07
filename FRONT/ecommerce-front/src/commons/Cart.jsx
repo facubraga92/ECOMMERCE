@@ -88,12 +88,10 @@ const Cart = () => {
       });
       setCart((prevCart) => ({ ...prevCart, amount: totalAmount }));
     } catch (error) {
-      console.error(
-        "Error al actualizar la cantidad del producto en el carrito",
-        error
-      );
+      alert('No hay suficientes unidades en stock para añadir al carrito')
     }
   };
+
   return (
     <Transition.Root show={visible} as={Fragment}>
       <Dialog
@@ -155,7 +153,10 @@ const Cart = () => {
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <img
                                     src={
-                                      item.products_variant.product.imgURL?.[0] ? (item.products_variant.product.imgURL?.[0]) : defaultImage
+                                      item.products_variant.product.imgURL?.[0]
+                                        ? item.products_variant.product
+                                            .imgURL?.[0]
+                                        : defaultImage
                                     }
                                     alt={item.imageAlt}
                                     className="h-full w-full object-cover object-center"
@@ -169,12 +170,11 @@ const Cart = () => {
                                         <Link
                                           to={`/products/${item.products_variant.product.id}`}
                                         >
-                                          <a>
-                                            {item.products_variant.product.name}
-                                          </a>
+                                          {item.products_variant.product.name}
                                         </Link>
                                       </h3>
                                       <p className="ml-4">
+                                        AR${" "}
                                         {item.products_variant.product.price *
                                           item.quantity}
                                       </p>
@@ -239,7 +239,7 @@ const Cart = () => {
                     <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
-                        <p>{cart.amount}</p>
+                        <p>AR$ {cart.amount}</p>
                       </div>
                       <p className="mt-0.5 text-sm text-gray-500">
                         Shipping and taxes calculated at checkout.

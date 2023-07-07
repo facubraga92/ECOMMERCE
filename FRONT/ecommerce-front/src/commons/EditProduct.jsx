@@ -45,7 +45,6 @@ const EditProduct = () => {
           stock: variant.stock,
         })
       );
-      console.log(productData.imgURL);
       setVariants(transformedVariants);
     } catch (error) {
       console.log("Error al cargar los datos del producto:", error);
@@ -94,46 +93,48 @@ const EditProduct = () => {
           credentials: "include",
         }
       );
-      console.log(response.data);
-      alert('Producto actualizado correctamente.')
+      alert("Producto actualizado correctamente.");
       // Realizar alguna acción después de la edición exitosa
     } catch (error) {
       console.log("Error al editar el producto:", error);
     }
   };
   return (
-    <div>
-      <h2>Editar Producto</h2>
+    <div className="max-w-md mx-auto">
+      <h2 className="text-2xl font-semibold mb-4">Editar Producto</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre:</label>
+        <div className="mb-4">
+          <label className="block mb-2">Nombre:</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div>
-          <label>Descripción:</label>
+        <div className="mb-4">
+          <label className="block mb-2">Descripción:</label>
           <textarea
             type="text"
-            className="w-[50%] h-20 resize-none"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded resize-none"
+            rows={4}
           />
         </div>
-        <div>
-          <label>Precio:</label>
+        <div className="mb-4">
+          <label className="block mb-2">Precio:</label>
           <input
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div>
-          <label>URL de Imagen:</label>
+        <div className="mb-4">
+          <label className="block mb-2">URL de Imagen:</label>
           {imgURLs.map((imgURL, index) => (
-            <div key={index}>
+            <div key={index} className="flex mb-2">
               <input
                 type="text"
                 value={imgURL}
@@ -142,54 +143,69 @@ const EditProduct = () => {
                   updatedImgURLs[index] = e.target.value;
                   setImgURLs(updatedImgURLs);
                 }}
+                className="flex-1 p-2 border border-gray-300 rounded mr-2"
               />
-              {imgURLs.length !== 0 && (
-                <button type="button" onClick={() => handleRemoveURL(index)}>x</button>
+              {index !== 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveURL(index)}
+                  className="px-2 py-1 bg-red-600 text-white rounded"
+                >
+                  x
+                </button>
               )}
             </div>
           ))}
-          <button type="button" onClick={handleAddURL}>Agregar URL</button>
+          <button
+            type="button"
+            onClick={handleAddURL}
+            className="px-2 py-1 bg-green-600  hover:bg-green-700 text-white rounded"
+          >
+            Agregar URL
+          </button>
         </div>
-        <div>
-          <h3>Variantes</h3>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">Variantes</h3>
           {variants.map((variant, index) => (
-            <div key={index}>
-              <div>
-                <label>Tamaño:</label>
+            <div key={index} className="mb-4">
+              <div className="mb-2">
+                <label className="block mb-1">Tamaño:</label>
                 <input
                   type="text"
                   value={variant.size}
                   onChange={(e) =>
                     handleVariantChange(index, "size", e.target.value)
                   }
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div>
-                <label>Color:</label>
+              <div className="mb-2">
+                <label className="block mb-1">Color:</label>
                 <input
                   type="text"
                   value={variant.color}
                   onChange={(e) =>
                     handleVariantChange(index, "color", e.target.value)
                   }
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
               <div>
-                <label>Stock:</label>
+                <label className="block mb-1">Stock:</label>
                 <input
                   type="number"
                   value={variant.stock}
                   onChange={(e) =>
                     handleVariantChange(index, "stock", e.target.value)
                   }
+                  className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <br />
             </div>
           ))}
           <button
             type="button"
-            className="bg-red-600 hover:bg-red-700 mb-2"
+            className="px-2 py-1 bg-red-600 hover:bg-red-700 mb-2 text-white rounded"
             onClick={() =>
               setVariants((prevVariants) => [
                 ...prevVariants,
@@ -200,7 +216,10 @@ const EditProduct = () => {
             Agregar Variante
           </button>
         </div>
-        <button type="submit" className="bg-red-600 hover:bg-red-700">
+        <button
+          type="submit"
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+        >
           Guardar Cambios
         </button>
       </form>

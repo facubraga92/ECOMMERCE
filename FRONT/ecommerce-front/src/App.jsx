@@ -15,6 +15,7 @@ import Buzos from "./components/Buzos";
 import Checkout from "./components/Checkout";
 import AdminView from "./components/AdminView";
 import EditProduct from "./commons/EditProduct";
+import AddProduct from "./components/AddProduct";
 
 function App() {
   const user = useSelector((state) => state.user);
@@ -41,11 +42,14 @@ function App() {
           path={"/admin"}
           element={user.role == "admin" ? <AdminView /> : <ProductsGrid />}
         />
-         <Route
+        <Route
           path={"/admin/editproduct/:id"}
           element={user.role == "admin" ? <EditProduct /> : <ProductsGrid />}
         />
-
+        <Route
+          path={"/admin/addproduct"}
+          element={user.role == "admin" ? <AddProduct /> : <ProductsGrid />}
+        />
       </Routes>
     </div>
   );

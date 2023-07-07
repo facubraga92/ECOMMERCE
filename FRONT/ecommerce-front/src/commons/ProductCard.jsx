@@ -24,17 +24,20 @@ const ProductCard = ({ product, onDeleteProduct }) => {
       onDeleteProduct(productId);
     }
   };
-
   return (
     <div>
       <div className="bg-transparent p-6 rounded shadow-md">
         <div onClick={() => handleProductClick(product.id)}>
           <img
+            // src={
+            //   product.imgURL?.length !== 0 && product.imgURL?.[0] !== ""
+            //     ? product.imgURL
+            //     : defaultImage
+            // }
             src={
-              product.imgURL?.length !== 0 && product.imgURL?.[0] !== ""
-                ? product.imgURL
-                : defaultImage
+              product.imgURL.length == 0 || product.imgURL[0] == "" ? defaultImage : product.imgURL[0]
             }
+
             alt={product.name}
             className="w-full h-48 object-contain mb-4 opacity-70 hover:opacity-100"
           />
