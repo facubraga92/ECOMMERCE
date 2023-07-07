@@ -31,7 +31,10 @@ function App() {
         <Route path={"/categories/1"} element={<Gorras />} />
         <Route path={"/categories/2"} element={<Remeras />} />
         <Route path={"/categories/3"} element={<Buzos />} />
-        <Route path={"/checkout"} element={<Checkout />} />
+        <Route
+          path={"/checkout"}
+          element={user.email ? <Checkout /> : <Login />}
+        />
         <Route
           path={"/cart-history"}
           element={user.email ? <CartHistory /> : <Login />}
