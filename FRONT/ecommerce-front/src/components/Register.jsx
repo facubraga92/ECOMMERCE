@@ -55,7 +55,7 @@ const Register = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container-register">
       <form onSubmit={handleSubmit}>
         <h1>Creá tu cuenta</h1>
         <div className="email t-input">
@@ -139,7 +139,10 @@ const Register = () => {
           <div className="mt-2">
             <label className="mt-4">
               ¿Tienes un código?{" "}
-              <a className="text-white cursor-default" onClick={handleCodeLinkClick}>
+              <a
+                className="text-white cursor-default"
+                onClick={handleCodeLinkClick}
+              >
                 Ingresar código.
               </a>
             </label>
