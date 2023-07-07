@@ -5,20 +5,22 @@
   margin: 0;
   padding: 0;
 }
-a {
+a{
   color: white;
 }
 :root {
-  --green: #ffffff;
+  --green: #ff2600;
 }
-.container-login {
+
+.container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 2rem;
 }
-.container-login form {
+.container form {
   flex: 0 1;
   min-height: 500px;
   min-width: 500px;
@@ -34,19 +36,19 @@ a {
   -moz-border-radius: 0.5rem;
   -ms-border-radius: 0.5rem;
   -o-border-radius: 0.5rem;
-  box-shadow: 1px 2px 13px -1px #ffffff;
+  box-shadow: 1px 2px 13px -1px #ff2600;
 }
-.container-login form h1 {
+.container form h1 {
   font-size: 3rem;
   color: white;
   font-weight: 400;
   margin-bottom: 1rem;
 }
-.container-login form .t-input {
+.container form .t-input {
   position: relative;
   width: 100%;
 }
-.container-login form .t-input input {
+.container form .t-input input {
   width: 100%;
   min-height: 40px;
   color: white;
@@ -60,10 +62,10 @@ a {
   white-space: 0.5;
   caret-color: var(--green);
 }
-.container-login form .t-input input::placeholder {
+.container form .t-input input::placeholder {
   opacity: 0;
 }
-.container-login form .t-input .b-line {
+.container form .t-input .b-line {
   content: "";
   position: absolute;
   height: 2px;
@@ -73,19 +75,19 @@ a {
   left: 0;
   transition-duration: 300ms;
 }
-.container-login form .t-input input:not(:placeholder-shown) ~ .b-line,
-.container-login form .t-input:hover .b-line,
-.container-login form .t-input:focus-within .b-line {
+.container form .t-input input:not(:placeholder-shown) ~ .b-line,
+.container form .t-input:hover .b-line,
+.container form .t-input:focus-within .b-line {
   background: linear-gradient(90deg, var(--green) 0%, transparent 100%);
   width: 100%;
 }
-.container-login form .t-input label {
+.container form .t-input label {
   outline: none;
 }
-.container-login form .t-input:hover label {
+.container form .t-input:hover label {
   color: var(--green);
 }
-.container-login form .t-input input + label {
+.container form .t-input input + label {
   position: absolute;
   left: 0;
   top: 50%;
@@ -97,8 +99,8 @@ a {
   color: white;
   transition-duration: 150ms;
 }
-.container-login form .t-input input:not(:placeholder-shown) + label,
-.container-login form .t-input input:focus + label {
+.container form .t-input input:not(:placeholder-shown) + label,
+.container form .t-input input:focus + label {
   font-size: 0.75rem;
   transform: translateY(-180%);
   -webkit-transform: translateY(-180%);
@@ -108,7 +110,7 @@ a {
   color: var(--green);
 }
 
-.container-login form button {
+.container form button {
   align-self: flex-end;
   width: 100px;
   height: 40px;
@@ -125,12 +127,12 @@ a {
   animation: neon 2s infinite linear;
 }
 
-.container-login form button:focus,
-.container-login form button:hover {
+.container form button:focus,
+.container form button:hover {
   background: var(--green);
   border: none;
   outline: 1px solid var(--green);
-  color: rgb(0, 0, 0);
+  color: white;
   animation: none;
-  box-shadow: 0 0 20px 10px #ffffff;
+  box-shadow: 0 0 20px 10px #ff2600;
 }

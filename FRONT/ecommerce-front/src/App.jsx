@@ -13,20 +13,12 @@ import AdminView from "./components/AdminView";
 import EditProduct from "./commons/EditProduct";
 import AddProduct from "./components/AddProduct";
 import UserCarts from "./commons/UserCarts";
-import video from "./assets/smoke.mp4";
 
 function App() {
   const user = useSelector((state) => state.user);
   return (
     <div className="w-screen">
       <Navbar />
-      <video
-        autoPlay
-        loop
-        muted
-        src={video}
-        className="video-container "
-      ></video>
       <Routes>
         <Route path={"/"} element={<ProductsGrid />} />
         <Route path={"/register"} element={<Register />} />
@@ -62,4 +54,5 @@ function App() {
     </div>
   );
 }
+
 export default App;

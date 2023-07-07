@@ -46,8 +46,8 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/" className="navbar-brand fontClass text-5xl">
-          {user.name ? `Hola! ${user.name}.` : `.trash talk.`}
+        <Link to="/" className="navbar-brand text-2xl">
+          {user.name ? (`Hola!, ${user.name}`) : (`TRASHTALK$$`)}
         </Link>
         <ul className="navbar-links">
           {user.email ? (

@@ -74,7 +74,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="container-login">
+      <div className="container">
         <form onSubmit={handleSubmit}>
           <h1>Inicia sesión</h1>
           <div className="email t-input">
