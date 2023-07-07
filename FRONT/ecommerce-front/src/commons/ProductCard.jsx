@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onDeleteProduct }) => {
   const user = useSelector((state) => state.user);
   const [currentVariant, setCurrentVariant] = useState(0);
   const navigate = useNavigate();
@@ -14,20 +15,26 @@ const ProductCard = ({ product }) => {
     navigate(`/products/${productId}`);
   };
 
-  const handleEditClick = (productId) => {
-    // Lógica para editar el producto
+  const handleDeleteClick = (productId) => {
+    const confirmed = window.confirm(
+      "¿Estás seguro de eliminar este artículo?"
+    );
+
+    if (confirmed) {
+      onDeleteProduct(productId);
+    }
   };
 
-  const handleDeleteClick = (productId) => {
-    // Lógica para eliminar el producto
-  };
-  // console.log(product);
   return (
     <div>
       <div className="bg-transparent p-6 rounded shadow-md">
         <div onClick={() => handleProductClick(product.id)}>
           <img
-            src={product.imgURL?.length != 0 && product.imgURL?.[0] != "" ? (product.imgURL) : (defaultImage)}
+            src={
+              product.imgURL?.length !== 0 && product.imgURL?.[0] !== ""
+                ? product.imgURL
+                : defaultImage
+            }
             alt={product.name}
             className="w-full h-48 object-contain mb-4 opacity-70 hover:opacity-100"
           />

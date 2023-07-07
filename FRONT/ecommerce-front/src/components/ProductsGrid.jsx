@@ -10,35 +10,27 @@ const ProductsGrid = () => {
   const [products, setProducts] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState(null);
 
-  /**
-   * Realiza una solicitud al servidor para obtener los productos según la categoría filtrada
-   * y actualiza el estado de products.
-   *
-   * @param {string|null} filteredCategory - Categoría utilizada para filtrar los productos.
-   */
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let url = "http://localhost:3000/api/products/";
+  const fetchData = async () => {
+    try {
+      let url = "http://localhost:3000/api/products/";
 
-        if (filteredCategory) {
-          url = `http://localhost:3000/api/products/categories/${filteredCategory}`;
-        }
-
-        const response = await axios.get(url);
-        const sortedProducts = response.data.sort((a, b) => a.id - b.id);
-
-        setProducts(sortedProducts);
-      } catch (error) {
-        console.log("Error al obtener los productos:", error);
+      if (filteredCategory) {
+        url = `http://localhost:3000/api/products/categories/${filteredCategory}`;
       }
-    };
+
+      const response = await axios.get(url);
+      const sortedProducts = response.data.sort((a, b) => a.id - b.id);
+
+      setProducts(sortedProducts);
+    } catch (error) {
+      console.log("Error al obtener los productos:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [filteredCategory]);
 
-  /**
-   * Ordena los productos por su ID cuando el componente se monta por primera vez.
-   */
   useEffect(() => {
     setProducts((prevProducts) =>
       [...prevProducts].sort((a, b) => a.id - b.id)
@@ -51,6 +43,21 @@ const ProductsGrid = () => {
 
   const handleAddProductClick = () => {
     // Lógica para agregar un nuevo producto
+  };
+
+  const handleDeleteProduct = (productId) => {
+    axios
+      .delete(`http://localhost:3000/api/products/${productId}`, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+        credentials: "include",
+      })
+      .then(() => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.log("Error al eliminar el artículo:", error);
+      });
   };
 
   return (
@@ -95,7 +102,11 @@ const ProductsGrid = () => {
             </div>
           )}
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onDeleteProduct={handleDeleteProduct}
+            />
           ))}
         </div>
       </div>
