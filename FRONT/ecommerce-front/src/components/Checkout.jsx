@@ -151,21 +151,21 @@ export default function Checkout() {
         <h1 className="mt-8">Checkout</h1>
         <div className="py-16 px-4 md:px-6 2xl:px-0 flex justify-end items-center 2xl:mx-auto 2xl:container w-full">
           <div className="flex flex-col justify-start items-start w-full space-y-9">
-            <div class="flex justify-start flex-col items-start space-y-2 mr 20 ">
-              <p class="text-base leading-normal sm:leading-4 text-gray-600 dark:text-white"></p>
+            <div className="flex justify-start flex-col items-start space-y-2  20 ">
+              <p className="text-base leading-normal sm:leading-4 text-gray-600 dark:text-white"></p>
             </div>
-            <div class="flex flex-col xl:flex-row justify-center xl:justify-between space-y-6 xl:space-y-0 xl:space-x-6 w-full">
-              <div class="p-8 bg-gray-100 dark:bg-gray-800 flex flex-col lg:w-full xl:w-3/5">
-                <div class="flex flex-row justify-center items-center mt-6">
-                  <hr class="border w-full" />
-                  <p class="flex flex-shrink-0 px-4 text-base leading-4 text-gray-600 dark:text-white">
+            <div className="flex flex-col xl:flex-row justify-center xl:justify-center space-y-6 xl:space-y-0 xl:space-x-6 w-full">
+              <div className="p-8 bg-gray-100 dark:bg-gray-800 flex flex-col lg:w-full xl:w-3/5">
+                <div className="flex flex-row justify-center items-center mt-6">
+                  <hr className="border w-full" />
+                  <p className="flex flex-shrink-0 px-4 text-base leading-4 text-gray-600 dark:text-white">
                     Paga con tarjeta
                   </p>
                   <hr className="border w-full" />
                 </div>
                 <div className="mt-8">
                   <input
-                    class="border border-gray-300 p-4 rounded w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                    className="border border-gray-300 p-4 rounded w-full text-base leading-4 placeholder-gray-600 text-white-600"
                     type="email"
                     name=""
                     id=""
@@ -174,13 +174,13 @@ export default function Checkout() {
                     onChange={handleEmailChange}
                   />
                 </div>
-                <label class="mt-8 text-base leading-4 text-gray-800 dark:text-gray-50">
+                <label className="mt-8 text-base leading-4 text-gray-800 dark:text-gray-50">
                   Detalles de tarjeta
                 </label>
                 <div className="mt-2 flex-col">
                   <div>
                     <input
-                      class="border rounded-tl rounded-tr border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded-tl rounded-tr border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -191,7 +191,7 @@ export default function Checkout() {
                   </div>
                   <div className="flex-row flex">
                     <input
-                      class="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -200,7 +200,7 @@ export default function Checkout() {
                       onChange={handleExpiryDateChange}
                     />
                     <input
-                      class="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -210,13 +210,13 @@ export default function Checkout() {
                     />
                   </div>
                 </div>
-                <label class="mt-8 text-base leading-4 text-gray-800 dark:text-gray-50">
+                <label className="mt-8 text-base leading-4 text-gray-800 dark:text-gray-50">
                   Nombre de la tarjeta
                 </label>
                 <div className="mt-2 flex-col">
                   <div>
                     <input
-                      class="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -236,7 +236,7 @@ export default function Checkout() {
                 <div className="mt-2 flex-col">
                   <div>
                     <input
-                      class="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -247,7 +247,7 @@ export default function Checkout() {
                   </div>
                   <div className="flex-row flex">
                     <input
-                      class="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded-bl border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -256,7 +256,7 @@ export default function Checkout() {
                       onChange={handlePostalCodeChange}
                     />
                     <input
-                      class="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
+                      className="border rounded-br border-gray-300 p-4 w-full text-base leading-4 placeholder-gray-600 text-white-600"
                       type="text"
                       name=""
                       id=""
@@ -269,7 +269,7 @@ export default function Checkout() {
                 <button
                   onClick={handleSubmit}
                   disabled={isButtonDisabled}
-                  class="mt-8 border border-transparent hover:border-gray-300 dark:bg-white dark:hover:bg-gray-900 dark:text-gray-900 dark:hover:text-white dark:border-transparent bg-gray-900 hover:bg-white text-white hover:text-gray-900 flex justify-center items-center py-4 rounded w-full"
+                  className="mt-8 border border-transparent hover:border-gray-300 dark:bg-white dark:hover:bg-gray-900 dark:text-gray-900 dark:hover:text-white dark:border-transparent bg-gray-900 hover:bg-white text-white hover:text-gray-900 flex justify-center items-center py-4 rounded w-full"
                 >
                   <div>
                     <p className="text-base leading-4">Pay </p>
