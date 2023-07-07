@@ -95,12 +95,12 @@ const EditProduct = () => {
         }
       );
       console.log(response.data);
+      alert('Producto actualizado correctamente.')
       // Realizar alguna acción después de la edición exitosa
     } catch (error) {
       console.log("Error al editar el producto:", error);
     }
   };
-  console.log("imgURLS", imgURLs);
   return (
     <div>
       <h2>Editar Producto</h2>
@@ -144,11 +144,11 @@ const EditProduct = () => {
                 }}
               />
               {imgURLs.length !== 0 && (
-                <button onClick={() => handleRemoveURL(index)}>x</button>
+                <button type="button" onClick={() => handleRemoveURL(index)}>x</button>
               )}
             </div>
           ))}
-          <button onClick={handleAddURL}>Agregar URL</button>
+          <button type="button" onClick={handleAddURL}>Agregar URL</button>
         </div>
         <div>
           <h3>Variantes</h3>
