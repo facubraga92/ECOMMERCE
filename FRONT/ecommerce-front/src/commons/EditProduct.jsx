@@ -12,6 +12,7 @@ const EditProduct = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [imgURLs, setImgURLs] = useState([]);
+  const [category, setCategory] = useState("");
   const [variants, setVariants] = useState([]);
   const [newVariant, setNewVariant] = useState({
     size: "",
@@ -35,6 +36,7 @@ const EditProduct = () => {
       setDescription(productData.description);
       setPrice(productData.price);
       setImgURLs(productData.imgURL || []);
+      setCategory(productData.category)
 
       // Transformar las variantes para que coincidan con la estructura esperada
       const transformedVariants = productData.products_variants.map(
@@ -80,6 +82,7 @@ const EditProduct = () => {
       description,
       price,
       imgURL: imgURLs,
+      category,
       variants,
     };
 
@@ -130,6 +133,19 @@ const EditProduct = () => {
             onChange={(e) => setPrice(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded"
           />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2">Categoría:</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          >
+            <option value="">Seleccionar categoría</option>
+            <option value="remeras">Remeras</option>
+            <option value="hoodies">Hoodies</option>
+            <option value="accesorios">Accesorios</option>
+          </select>
         </div>
         <div className="mb-4">
           <label className="block mb-2">URL de Imagen:</label>

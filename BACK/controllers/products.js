@@ -176,7 +176,7 @@ const deleteProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
   const productId = req.params.id;
-  const { name, description, price, imgURL, variants } = req.body;
+  const { name, description, price, imgURL,category, variants } = req.body;
 
   try {
     // Editar el producto principal
@@ -185,6 +185,7 @@ const editProduct = async (req, res) => {
         name,
         description,
         price,
+        category,
         imgURL,
       },
       {
@@ -232,17 +233,6 @@ const createProduct = async (req, res) => {
       price,
       imgURL: imgURLs,
     });
-
-    // Crear las variantes
-    // for (const variant of variants) {
-    //   const { size, color, stock } = variant;
-    //   await Products_variants.create({
-    //     size,
-    //     color,
-    //     stock,
-    //     productId: product.id,
-    //   });
-    // }
 
     res.status(200).send({
       success: true,
